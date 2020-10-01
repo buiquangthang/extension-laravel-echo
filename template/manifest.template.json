@@ -1,0 +1,29 @@
+{
+  "name": "Laravel Echo client",
+  "short_name": "Laravel Echo",
+  "description": "This is extension help you listen event from laravel echo server",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "icons": {
+    "16": "images/icon-16.png",
+    "128": "images/icon-128.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "19": "images/icon-19.png",
+      "38": "images/icon-38.png"
+    },
+    "default_title": "Laravel Echo client"
+  },
+  "omnibox": {
+        "keyword": "laravel-echo"
+    },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "background": {        
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "permissions": [
+    "ws://*/"
+  ]
+}
