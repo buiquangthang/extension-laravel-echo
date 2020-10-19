@@ -36,7 +36,7 @@
 <script>
 export default {
   name: 'Cat',
-  data() {
+  data () {
     return {
       message: '',
       list_messages: [],
@@ -48,10 +48,10 @@ export default {
   },
   created () {},
   computed: {
-    prettyAreaData: function() {
+    prettyAreaData: function () {
       let json = JSON.stringify(this.list_messages, null, 2)
       json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+]?\d+)?)/g, function(match) {
+      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+]?\d+)?)/g, function (match) {
         var cls = 'number'
         if (/^"/.test(match)) {
           if (/:$/.test(match)) {
@@ -69,23 +69,23 @@ export default {
     }
   },
   methods: {
-    connectChannel() {
+    connectChannel () {
       window.Echo.disconnect()
       this.list_messages = []
 
-        window.Echo = new Echo.constructor({
-            broadcaster: 'socket.io',
-            host: this.domain,
-            auth:
+      window.Echo = new Echo.constructor({
+        broadcaster: 'socket.io',
+        host: this.domain,
+        auth:
             {
               headers:
               {
-                'Authorization': this.token,
+                'Authorization': this.token
               }
             }
-          })
+      })
 
-        Echo.join(this.channel)
+      Echo.join(this.channel)
         .here((users) => {
           this.usersOnline = users
         })
@@ -102,15 +102,15 @@ export default {
         //   this.list_messages.unshift({message: 'Authorization fail!'});
         // })
 
-        Echo.connector.socket.on('connect', (err) => {
-          this.list_messages.unshift({message: 'Connect success'});
-        });
+      Echo.connector.socket.on('connect', (err) => {
+        this.list_messages.unshift({message: 'Connect success'})
+      })
     },
-    disconnectChannel() {
-      Echo.leave(this.channel);
-      this.list_messages.unshift({message: 'Leave Channel'});
+    disconnectChannel () {
+      Echo.leave(this.channel)
+      this.list_messages.unshift({message: 'Leave Channel'})
     }
-  },
+  }
 }
 </script>
 

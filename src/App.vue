@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Cat/>
+    <router-view></router-view>
 
   </div>
 </template>
