@@ -1,44 +1,27 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import AppLayout from './layouts/App.vue'
-import PublicLayout from './layouts/Public.vue'
 import Dashboard from './views/Dashboard.vue'
-import Dashboard2 from './views/Dashboard2.vue'
 import Login from './views/Login.vue'
 import Home from './views/Home.vue'
+import Register from './views/Register.vue'
+import ForgotPassword from './views/ForgotPassword'
+import EchoClient from './views/EchoClient'
 
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
   routes: [
-    {
-      path: '/',
-      component: Home
-    },
-    {
-      path: '/login',
-      component: PublicLayout,
+    { path: '/',
+      name: 'Home',
+      component: Home,
       children: [
-        {
-          path: '',
-          component: Login
-        }
+        { path: '', name: 'DashBoard', component: Dashboard },
+        { path: '/echo-client', name: 'EchoClient', component: EchoClient }
       ]
     },
-    {
-      path: '/dashboard',
-      component: AppLayout,
-      children: [
-        {
-          path: '',
-          component: Dashboard
-        },
-        {
-          path: '2',
-          component: Dashboard2
-        }
-      ]
-    }
+    { path: '/login', name: 'Login', component: Login },
+    { path: '/register', name: 'Register', component: Register },
+    { path: '/forgot-password', name: 'Forgot Password', component: ForgotPassword }
   ]
 })
