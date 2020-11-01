@@ -6,6 +6,7 @@ import Register from './views/Register.vue'
 import ForgotPassword from './views/ForgotPassword'
 import EchoClient from './views/EchoClient'
 import AppLayout from './layouts/App'
+import PublicLayout from './layouts/Public'
 
 Vue.use(Router)
 
@@ -20,8 +21,15 @@ export default new Router({
         { path: '/echo-client', name: 'EchoClient', component: EchoClient }
       ]
     },
-    { path: '/login', name: 'Login', component: Login },
-    { path: '/register', name: 'Register', component: Register },
-    { path: '/forgot-password', name: 'Forgot Password', component: ForgotPassword }
+    {
+      path: '/',
+      name: 'PublicLayout',
+      component: PublicLayout,
+      children: [
+        { path: '/login', name: 'Login', component: Login },
+        { path: '/register', name: 'Register', component: Register },
+        { path: '/forgot-password', name: 'Forgot Password', component: ForgotPassword }
+      ]
+    }
   ]
 })

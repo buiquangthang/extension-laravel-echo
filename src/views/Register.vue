@@ -61,23 +61,6 @@
 
 <script>
 export default {
-  name: 'Register',
-  methods: {
-    toggleBodyClass (addRemoveClass, className) {
-      const el = document.body
-
-      if (addRemoveClass === 'addClass') {
-        el.classList.add(className)
-      } else {
-        el.classList.remove(className)
-      }
-    }
-  },
-  mounted () {
-    this.toggleBodyClass('addClass', 'bg-gradient-primary')
-  },
-  destroyed () {
-    this.toggleBodyClass('removeClass', 'bg-gradient-primary')
-  }
+  name: 'Register'
 }
 </script>
