@@ -12,39 +12,38 @@
       </div>
 
       <div class="card-body">
-        <form class="user">
-        <div class="form-group">
-          <input type="text" class="form-control form-control-user" id="domain"
-            v-model="domain" placeholder="Input Your Host">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control form-control-user" id="channel"
-            v-model="channel" placeholder="Input Your Channel">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control form-control-user" id="event"
-            v-model="event" placeholder="Input Your Event">
-        </div>
-        <div class="form-group">
-          <input type="password" class="form-control form-control-user" id="token"
-            v-model="token" placeholder="Input Your Token">
-        </div>
-
-        <div class="form-group row">
-
-          <div class="col-sm-6 mb-3 mb-sm-0">
-          <button @click="connectChannel" class="btn btn-primary btn-user btn-block">
-            Connect
-          </button>
+        <form class="user" v-on:submit.prevent="connectChannel" autocomplete="on">
+          <div class="form-group">
+            <label for="frmNameA">Name</label>
+            <input type="text" class="form-control form-control-user" id="domain"
+              v-model="domain" placeholder="Input Your Host" name="domain">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control form-control-user" id="channel"
+              v-model="channel" placeholder="Input Your Channel" name="channel">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control form-control-user" id="event"
+              v-model="event" placeholder="Input Your Event" name="event">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control form-control-user" id="token"
+              v-model="token" placeholder="Input Your Token" name="token">
           </div>
 
-          <div class="col-sm-6 mb-3 mb-sm-0">
-          <button @click="disconnectChannel" class="btn btn-google btn-user btn-block">
-            Disconnect
-          </button>
-          </div>
+          <div class="form-group row">
 
-        </div>
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <input type="submit" value="Connect" class="btn btn-primary btn-user btn-block"></input>
+            </div>
+
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <button @click="disconnectChannel" class="btn btn-google btn-user btn-block">
+                Disconnect
+              </button>
+            </div>
+
+          </div>
 
         </form>
       </div>
@@ -71,6 +70,7 @@
 
 <script>
 import Echo from 'laravel-echo'
+window.io = require('socket.io-client')
 
 export default {
   name: 'EchoClient',
@@ -112,6 +112,10 @@ export default {
       this.list_messages = []
       this.is_error = false
 
+      if (typeof window.Echo !== "undefined") {
+        window.Echo.disconnect()
+      }
+
       window.Echo = new Echo({
         broadcaster: 'socket.io',
         host: this.domain,
@@ -127,7 +131,6 @@ export default {
       window.Echo.connector.socket.on('connect_error', (err) => {
         if (!this.is_error) {
           this.is_error = true
-          this.disconnectChannel();
           this.list_messages.unshift({message: 'Error connecting to server'});
         }
       })

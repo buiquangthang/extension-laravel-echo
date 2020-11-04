@@ -1,14 +1,11 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
-import Echo from 'laravel-echo'
-
-window.io = require('socket.io-client')
+import { router } from './router'
 
 Vue.config.productionTip = false
 
 new Vue({
-  router,
+  router: router,
   render: h => h(App),
   el: '#app'
 })
