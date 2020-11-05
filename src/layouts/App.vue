@@ -61,12 +61,15 @@
             </button>
 
             <!-- Topbar Search -->
-            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+              v-on:submit.prevent="connectServer">
               <div class="input-group">
-                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                <input type="text" class="form-control bg-light border-0 small" ref="serverHost" id="serverHost"
+                  placeholder="Input your socket server URL" aria-label="Search" aria-describedby="basic-addon2"
+                  v-model="domain" name="domain">
                 <div class="input-group-append">
-                  <button class="btn btn-primary" type="button">
-                    <i class="fas fa-search fa-sm"></i>
+                  <button class="btn btn-success" type="submit">
+                    Connect
                   </button>
                 </div>
               </div>
@@ -206,7 +209,24 @@
 </template>
 
 <script>
+import Echo from 'laravel-echo'
+window.io = require('socket.io-client')
+
 export default {
-  name: 'AppLayout'
+  name: 'AppLayout',
+  data () {
+    return {
+      domain: ''
+    }
+  },
+  methods: {
+    connectServer() {
+      window.Echo = new Echo({
+        broadcaster: 'socket.io',
+        host: this.domain,
+        reconnection: false
+      });
+    }
+  }
 }
 </script>

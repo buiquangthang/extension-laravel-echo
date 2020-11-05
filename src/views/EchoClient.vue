@@ -1,70 +1,90 @@
 <template>
   <div class="container-fluid">
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">Laravel Echo client</h1>
-
     <div class="row">
-    <div class="col-lg-6">
-      <div class="card shadow mb-4">
-      <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Connect Information</h6>
-      </div>
+      <div class="col-lg-12">
+        <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Connect Information</h6>
+        </div>
 
-      <div class="card-body">
-        <form class="user" v-on:submit.prevent="connectChannel" autocomplete="on">
-          <div class="form-group">
-            <label for="frmNameA">Name</label>
-            <input type="text" class="form-control form-control-user" id="domain"
-              v-model="domain" placeholder="Input Your Host" name="domain">
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="channel"
-              v-model="channel" placeholder="Input Your Channel" name="channel">
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control form-control-user" id="event"
-              v-model="event" placeholder="Input Your Event" name="event">
-          </div>
-          <div class="form-group">
-            <input type="password" class="form-control form-control-user" id="token"
-              v-model="token" placeholder="Input Your Token" name="token">
-          </div>
+        <div class="card-body">
+          <form class="user" v-on:submit.prevent="connectChannel" autocomplete="on">
+            <div class="form-group row">
+              <div class="col-sm-6 mb-3 mb-sm-0">
+                  <input type="text" class="form-control" id="channel"
+                    v-model="channel" placeholder="Input Your Channel" name="channel">
+              </div>
 
-          <div class="form-group row">
-
-            <div class="col-sm-6 mb-3 mb-sm-0">
-              <input type="submit" value="Connect" class="btn btn-primary btn-user btn-block"></input>
+              <div class="col-sm-6">
+                  <input type="text" class="form-control" id="event"
+                    v-model="event" placeholder="Input Your Event" name="event">
+              </div>
             </div>
 
-            <div class="col-sm-6 mb-3 mb-sm-0">
-              <button @click="disconnectChannel" class="btn btn-google btn-user btn-block">
-                Disconnect
-              </button>
+            <div class="form-group row">
+              <div class="col-sm-6 mb-3 mb-sm-0">
+                <select class="form-control" id="broadcaster" placeholder="">
+                  <option selected>Choose broadcaster</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+
+              <div class="col-sm-6">
+                  <input type="password" class="form-control" id="token"
+                    v-model="token" placeholder="Input Your Token" name="token">
+              </div>
             </div>
 
-          </div>
+            <div class="form-group row">
 
-        </form>
-      </div>
-      </div>
-    </div>
+              <div class="col-sm-6 mb-3 mb-sm-0">
+                <input type="submit" value="Listen" class="btn btn-primary btn-user btn-block"></input>
+              </div>
 
-    <div class="col-lg-6">
-      <div class="card shadow mb-4">
-      <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Socket Response</h6>
-      </div>
+              <div class="col-sm-6 mb-3 mb-sm-0">
+                <button @click="disconnectChannel" class="btn btn-google btn-user btn-block">
+                  Leave
+                </button>
+              </div>
 
-      <div class="card-body">
-        <div class="column">
-          <pre v-html="prettyAreaData" size="100"></pre>
+            </div>
+
+          </form>
+        </div>
         </div>
       </div>
-      </div>
-    </div>
+
     </div>
 
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Socket Response</h6>
+          </div>
+
+          <div class="card-body">
+            <div class="column">
+              <pre v-html="prettyAreaData" size="100"></pre>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Your History</h6>
+            </div>
+
+            <div class="card-body">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -77,8 +97,8 @@ export default {
   data () {
     return {
       message: '',
-      list_messages: [],
       domain: '',
+      list_messages: [],
       event: '',
       channel: '',
       token: '',
@@ -111,6 +131,7 @@ export default {
     connectChannel () {
       this.list_messages = []
       this.is_error = false
+      this.domain = this.$parent.domain
 
       if (typeof window.Echo !== "undefined") {
         window.Echo.disconnect()
@@ -119,6 +140,8 @@ export default {
       window.Echo = new Echo({
         broadcaster: 'socket.io',
         host: this.domain,
+        reconnection: true,
+        reconnectionAttempts: 3,
         auth:
             {
               headers:
