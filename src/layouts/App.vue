@@ -220,12 +220,12 @@ export default {
     }
   },
   methods: {
-    connectServer() {
+    connectServer () {
       window.Echo = new Echo({
         broadcaster: 'socket.io',
         host: this.domain,
         reconnection: false
-      });
+      })
     }
   }
 }

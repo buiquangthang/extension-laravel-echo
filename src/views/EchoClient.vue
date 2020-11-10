@@ -11,23 +11,32 @@
           <form class="user" v-on:submit.prevent="connectChannel" autocomplete="on">
             <div class="form-group row">
               <div class="col-sm-6 mb-3 mb-sm-0">
-                  <input type="text" class="form-control" id="channel"
-                    v-model="channel" placeholder="Input Your Channel" name="channel">
+                <vue-simple-suggest
+                  v-model="channel"
+                  placeholder="Input Your Channel"
+                  :styles="autoCompleteStyle"
+                  :list='getSuggestionList("echo-client-channel")'
+                  :filter-by-query="true">
+                </vue-simple-suggest>
               </div>
 
               <div class="col-sm-6">
-                  <input type="text" class="form-control" id="event"
-                    v-model="event" placeholder="Input Your Event" name="event">
+                <vue-simple-suggest
+                  v-model="event"
+                  placeholder="Input Your Event"
+                  :styles="autoCompleteStyle"
+                  :list='getSuggestionList("echo-client-event")'
+                  :filter-by-query="true">
+                </vue-simple-suggest>
               </div>
             </div>
 
             <div class="form-group row">
               <div class="col-sm-6 mb-3 mb-sm-0">
-                <select class="form-control" id="broadcaster" placeholder="">
-                  <option selected>Choose broadcaster</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                <select class="form-control" id="broadcaster" v-model="broadcaster">
+                  <option disabled value="">Choose broadcaster</option>
+                  <option value="socket.io">Socket IO</option>
+                  <option value="pusher">Pusher</option>
                 </select>
               </div>
 
@@ -90,10 +99,15 @@
 
 <script>
 import Echo from 'laravel-echo'
+import VueSimpleSuggest from 'vue-simple-suggest'
+import 'vue-simple-suggest/dist/styles.css'
 window.io = require('socket.io-client')
 
 export default {
   name: 'EchoClient',
+  components: {
+    VueSimpleSuggest
+  },
   data () {
     return {
       message: '',
@@ -102,7 +116,11 @@ export default {
       event: '',
       channel: '',
       token: '',
-      is_error: false
+      broadcaster: '',
+      is_error: false,
+      autoCompleteStyle: {
+        defaultInput: 'form-control'
+      }
     }
   },
   created () {},
@@ -133,12 +151,12 @@ export default {
       this.is_error = false
       this.domain = this.$parent.domain
 
-      if (typeof window.Echo !== "undefined") {
+      if (typeof window.Echo !== 'undefined') {
         window.Echo.disconnect()
       }
 
       window.Echo = new Echo({
-        broadcaster: 'socket.io',
+        broadcaster: this.broadcaster,
         host: this.domain,
         reconnection: true,
         reconnectionAttempts: 3,
@@ -151,15 +169,18 @@ export default {
             }
       })
 
+      this.updateSuggestionList('echo-client-channel', this.channel)
+      this.updateSuggestionList('echo-client-event', this.event)
+
       window.Echo.connector.socket.on('connect_error', (err) => {
         if (!this.is_error) {
           this.is_error = true
-          this.list_messages.unshift({message: 'Error connecting to server'});
+          this.list_messages.unshift({message: 'Error connecting to server'})
         }
       })
 
       window.Echo.connector.socket.on('subscription_error', (channel, data) => {
-        this.list_messages.unshift({message: 'Authorization fail!'});
+        this.list_messages.unshift({message: 'Authorization fail!'})
       })
 
       window.Echo.connector.socket.on('connect', (err) => {
@@ -171,12 +192,28 @@ export default {
     disconnectChannel () {
       window.Echo.leave(this.channel)
       this.list_messages.unshift({message: 'Leave Channel'})
+    },
+
+    updateSuggestionList (storageKey, data) {
+      let list = []
+      if (localStorage.getItem(storageKey) !== undefined) {
+        list = JSON.parse(localStorage.getItem(storageKey))
+      }
+
+      if (!list.includes(data)) {
+        list.push(data)
+      }
+
+      localStorage.setItem(storageKey, JSON.stringify(list))
+    },
+
+    getSuggestionList (storageKey) {
+      return JSON.parse(localStorage.getItem(storageKey))
     }
   }
 }
 
 </script>
-
 
 <style>
   pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; text-align: left; font-size: initial;}
@@ -194,5 +231,14 @@ export default {
     content: "";
     display: table;
     clear: both;
+  }
+
+  .z-1000 {
+    z-index: 1000;
+  }
+
+  .hover {
+    background-color: #007bff;
+    color: #fff;
   }
 </style>
