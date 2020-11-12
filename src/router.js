@@ -14,11 +14,9 @@ export const router = new Router({
   mode: 'history',
   routes: [
     { path: '/',
-      name: 'AppLayout',
       component: AppLayout,
       children: [
-        { path: '', name: 'DashBoard', component: Dashboard },
-        { path: '/echo-client', name: 'EchoClient', component: EchoClient }
+        { path: '', name: 'EchoClient', component: EchoClient },
       ]
     },
     {
@@ -36,7 +34,7 @@ export const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/register', '/echo-client']
+  const publicPages = ['/login', '/register', '/echo-client', '/']
   const authRequired = !publicPages.includes(to.path)
   const loggedIn = localStorage.getItem('user')
 

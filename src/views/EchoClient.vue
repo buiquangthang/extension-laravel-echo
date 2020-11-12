@@ -123,7 +123,23 @@ export default {
       }
     }
   },
-  created () {},
+  created () {
+    window.Echo.connector.socket.on('connect_error', (err) => {
+      if (!this.is_error) {
+        this.is_error = true
+        this.list_messages.unshift({message: 'Error connecting to server'})
+      }
+    })
+
+    window.Echo.connector.socket.on('subscription_error', (channel, data) => {
+      this.list_messages.unshift({message: 'Authorization fail!'})
+    })
+
+    window.Echo.connector.socket.on('connect', (err) => {
+      this.is_error = false
+      this.list_messages.unshift({message: 'Connect success'})
+    })
+  },
   computed: {
     prettyAreaData: function () {
       let json = JSON.stringify(this.list_messages, null, 2)
@@ -171,22 +187,6 @@ export default {
 
       this.updateSuggestionList('echo-client-channel', this.channel)
       this.updateSuggestionList('echo-client-event', this.event)
-
-      window.Echo.connector.socket.on('connect_error', (err) => {
-        if (!this.is_error) {
-          this.is_error = true
-          this.list_messages.unshift({message: 'Error connecting to server'})
-        }
-      })
-
-      window.Echo.connector.socket.on('subscription_error', (channel, data) => {
-        this.list_messages.unshift({message: 'Authorization fail!'})
-      })
-
-      window.Echo.connector.socket.on('connect', (err) => {
-        this.is_error = false
-        this.list_messages.unshift({message: 'Connect success'})
-      })
     },
 
     disconnectChannel () {

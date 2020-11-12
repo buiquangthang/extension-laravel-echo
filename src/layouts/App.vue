@@ -61,19 +61,28 @@
             </button>
 
             <!-- Topbar Search -->
-            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
-              v-on:submit.prevent="connectServer">
-              <div class="input-group">
-                <input type="text" class="form-control bg-light border-0 small" ref="serverHost" id="serverHost"
-                  placeholder="Input your socket server URL" aria-label="Search" aria-describedby="basic-addon2"
-                  v-model="domain" name="domain">
-                <div class="input-group-append">
-                  <button class="btn btn-success" type="submit">
-                    Connect
-                  </button>
+            <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100"
+              v-on:click="connectServer" style="width: 30%; margin-right: 16px !important">
+              <div class="form-group row">
+                <div class="col-sm-12">
+                  <input type="text" class="form-control" id="domain" style="width: 100% !important"
+                    v-model="domain" placeholder="Input Your Token" name="domain">
                 </div>
               </div>
-            </form>
+            </div>
+
+            <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100"
+              v-on:click.prevent="connectServer">
+              <div class="form-group row">
+                <div class="col-sm-12">
+                  <select class="form-control" id="broadcaster" v-model="broadcaster">
+                    <option disabled value="">Choose broadcaster</option>
+                    <option value="socket.io">Socket IO</option>
+                    <option value="pusher">Pusher</option>
+                  </select>
+                </div>
+              </div>
+            </div>
 
             <!-- Topbar Navbar -->
             <ul class="navbar-nav ml-auto">
@@ -216,7 +225,8 @@ export default {
   name: 'AppLayout',
   data () {
     return {
-      domain: ''
+      domain: '',
+      broadcaster: ''
     }
   },
   methods: {
