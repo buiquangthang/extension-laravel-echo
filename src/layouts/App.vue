@@ -10,7 +10,7 @@
           <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
           </div>
-          <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+          <div class="sidebar-brand-text mx-3">Pub/Sub <sup>2</sup></div>
         </a>
 
         <!-- Divider -->
@@ -62,25 +62,28 @@
 
             <!-- Topbar Search -->
             <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100"
-              v-on:click="connectServer" style="width: 30%; margin-right: 16px !important">
-              <div class="form-group row">
-                <div class="col-sm-12">
+              style="width: 30%; margin-right: 12px !important; margin-left: 12px !important">
+              <div class="form-group">
                   <input type="text" class="form-control" id="domain" style="width: 100% !important"
-                    v-model="domain" placeholder="Input Your Token" name="domain">
-                </div>
+                    v-model="domain" placeholder="Input Your Domain" name="domain">
               </div>
             </div>
 
             <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100"
-              v-on:click.prevent="connectServer">
-              <div class="form-group row">
-                <div class="col-sm-12">
+              style="margin-right: 12px !important; margin-left: 12px !important">
+              <div class="form-group">
                   <select class="form-control" id="broadcaster" v-model="broadcaster">
                     <option disabled value="">Choose broadcaster</option>
                     <option value="socket.io">Socket IO</option>
                     <option value="pusher">Pusher</option>
                   </select>
-                </div>
+              </div>
+            </div>
+
+            <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100"
+              style="margin-right: 12px !important; margin-left: 12px !important">
+              <div class="form-group">
+                <button @click="connectServer" class="btn btn-success">Connect</button>
               </div>
             </div>
 
@@ -195,7 +198,7 @@
           </nav>
           <!-- End of Topbar -->
 
-          <router-view/>
+          <router-view ref="pubSubClient"/>
 
         </div>
         <!-- End of Main Content -->
@@ -229,13 +232,10 @@ export default {
       broadcaster: ''
     }
   },
+
   methods: {
     connectServer () {
-      window.Echo = new Echo({
-        broadcaster: 'socket.io',
-        host: this.domain,
-        reconnection: false
-      })
+      this.$refs.pubSubClient.connectServer()
     }
   }
 }

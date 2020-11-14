@@ -123,23 +123,8 @@ export default {
       }
     }
   },
-  created () {
-    window.Echo.connector.socket.on('connect_error', (err) => {
-      if (!this.is_error) {
-        this.is_error = true
-        this.list_messages.unshift({message: 'Error connecting to server'})
-      }
-    })
 
-    window.Echo.connector.socket.on('subscription_error', (channel, data) => {
-      this.list_messages.unshift({message: 'Authorization fail!'})
-    })
-
-    window.Echo.connector.socket.on('connect', (err) => {
-      this.is_error = false
-      this.list_messages.unshift({message: 'Connect success'})
-    })
-  },
+  created () {},
   computed: {
     prettyAreaData: function () {
       let json = JSON.stringify(this.list_messages, null, 2)
@@ -162,6 +147,30 @@ export default {
     }
   },
   methods: {
+    connectServer() {
+      window.Echo = new Echo({
+        broadcaster: this.$parent.broadcaster,
+        host: this.$parent.domain,
+        reconnection: true,
+        reconnectionAttempts: 3
+      })
+
+      window.Echo.connector.socket.on('connect_error', (err) => {
+        if (!this.is_error) {
+          this.is_error = true
+          this.list_messages.unshift({message: 'Error connecting to server'})
+        }
+      })
+
+      window.Echo.connector.socket.on('connect', (err) => {
+        this.is_error = false
+        this.list_messages.unshift({message: 'Connect success'})
+      })
+
+      window.Echo.connector.socket.on('subscription_error', (channel, data) => {
+        this.list_messages.unshift({message: 'Authorization fail!'})
+      })
+    },
     connectChannel () {
       this.list_messages = []
       this.is_error = false
@@ -171,18 +180,8 @@ export default {
         window.Echo.disconnect()
       }
 
-      window.Echo = new Echo({
-        broadcaster: this.broadcaster,
-        host: this.domain,
-        reconnection: true,
-        reconnectionAttempts: 3,
-        auth:
-            {
-              headers:
-              {
-                'Authorization': this.token
-              }
-            }
+      window.Echo.join(this.channel).listen(this.event, (data) => {
+          this.list_messages.unshift(data)
       })
 
       this.updateSuggestionList('echo-client-channel', this.channel)
