@@ -16,12 +16,14 @@
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                   </div>
-                  <form class="user">
+                  <form class="user" @submit.prevent="handleSubmit">
                     <div class="form-group">
-                      <input type="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+                      <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+                        v-model="email" aria-describedby="emailHelp" placeholder="Enter Email Address...">
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">
+                      <input type="password" class="form-control form-control-user" id="exampleInputPassword"
+                        v-model="password" placeholder="Password">
                     </div>
                     <div class="form-group">
                       <div class="custom-control custom-checkbox small">
@@ -59,7 +61,33 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
-  name: 'Login'
-}
+    name: 'Login',
+    data () {
+        return {
+            email: '',
+            password: '',
+            submitted: false
+        }
+    },
+    computed: {
+        ...mapState('account', ['status'])
+    },
+    created () {
+        // reset login status
+        this.logout();
+    },
+    methods: {
+        ...mapActions('account', ['login', 'logout']),
+        handleSubmit (e) {
+            this.submitted = true;
+            const { email, password } = this;
+            if (email && password) {
+                this.login({ username, password })
+            }
+        }
+    }
+};
 </script>

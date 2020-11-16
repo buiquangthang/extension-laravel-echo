@@ -88,5 +88,11 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  }
+  },
+  externals: {
+        // global app config object
+        config: JSON.stringify({
+            apiUrl: 'http://localhost:4000'
+        })
+    }
 }
