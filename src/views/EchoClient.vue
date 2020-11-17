@@ -176,9 +176,10 @@ export default {
       this.is_error = false
       this.domain = this.$parent.domain
 
-      if (typeof window.Echo !== 'undefined') {
-        window.Echo.disconnect()
-      }
+      // if (typeof window.Echo !== 'undefined') {
+        // window.Echo.disconnect();
+        // window.Echo.connect();
+      // }
 
       window.Echo.join(this.channel).listen(this.event, (data) => {
           this.list_messages.unshift(data)
@@ -195,8 +196,12 @@ export default {
 
     updateSuggestionList (storageKey, data) {
       let list = []
+
       if (localStorage.getItem(storageKey) !== undefined) {
         list = JSON.parse(localStorage.getItem(storageKey))
+        if (list === null) {
+          list = []
+        }
       }
 
       if (!list.includes(data)) {

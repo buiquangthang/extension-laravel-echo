@@ -6,7 +6,7 @@ import VeeValidate from 'vee-validate';
 
 import { store } from './_store';
 
-Vue.use(VeeValidate);
+// Vue.use(VeeValidate);
 
 // setup fake backend
 import { configureFakeBackend } from './_helpers';
