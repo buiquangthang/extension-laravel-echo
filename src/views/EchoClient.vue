@@ -8,7 +8,7 @@
         </div>
 
         <div class="card-body">
-          <form class="user" v-on:submit.prevent="connectChannel" autocomplete="on">
+          <div class="user">
             <div class="form-group row">
               <div class="col-sm-6 mb-3 mb-sm-0">
                 <vue-simple-suggest
@@ -32,35 +32,26 @@
             </div>
 
             <div class="form-group row">
-              <div class="col-sm-6 mb-3 mb-sm-0">
-                <select class="form-control" id="broadcaster" v-model="broadcaster">
-                  <option disabled value="">Choose broadcaster</option>
-                  <option value="socket.io">Socket IO</option>
-                  <option value="pusher">Pusher</option>
-                </select>
-              </div>
-
               <div class="col-sm-6">
-                  <input type="password" class="form-control" id="token"
+                  <input type="text" class="form-control" id="token"
                     v-model="token" placeholder="Input Your Token" name="token">
               </div>
-            </div>
 
-            <div class="form-group row">
+              <div class="col-sm-6 mb-3 mb-sm-0 row">
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <button @click="connectChannel" class="btn btn-primary btn-user btn-block">
+                    Connect
+                  </button>
+                </div>
 
-              <div class="col-sm-6 mb-3 mb-sm-0">
-                <input type="submit" value="Listen" class="btn btn-primary btn-user btn-block"></input>
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <button @click="disconnectChannel" class="btn btn-google btn-user btn-block">
+                    Leave
+                  </button>
+                </div>
               </div>
-
-              <div class="col-sm-6 mb-3 mb-sm-0">
-                <button @click="disconnectChannel" class="btn btn-google btn-user btn-block">
-                  Leave
-                </button>
-              </div>
-
             </div>
-
-          </form>
+          </div>
         </div>
         </div>
       </div>
@@ -156,14 +147,10 @@ export default {
       })
 
       window.Echo.connector.socket.on('connect_error', (err) => {
-        if (!this.is_error) {
-          this.is_error = true
           this.list_messages.unshift({message: 'Error connecting to server'})
-        }
       })
 
       window.Echo.connector.socket.on('connect', (err) => {
-        this.is_error = false
         this.list_messages.unshift({message: 'Connect success'})
       })
 
@@ -173,16 +160,36 @@ export default {
     },
     connectChannel () {
       this.list_messages = []
-      this.is_error = false
-      this.domain = this.$parent.domain
+      window.Echo.leave(this.channel)
 
-      // if (typeof window.Echo !== 'undefined') {
-        // window.Echo.disconnect();
-        // window.Echo.connect();
-      // }
+      window.Echo = new Echo({
+        broadcaster: this.$parent.broadcaster,
+        host: this.$parent.domain,
+        reconnection: true,
+        reconnectionAttempts: 3,
+        auth:
+        {
+          headers:
+          {
+            'Authorization': this.token,
+          }
+        }
+      })
 
-      window.Echo.join(this.channel).listen(this.event, (data) => {
+      window.Echo.channel(this.channel).listen(this.event, (data) => {
           this.list_messages.unshift(data)
+      })
+
+      window.Echo.connector.socket.on('connect_error', (err) => {
+          this.list_messages.unshift({message: 'Error connecting to server'})
+      })
+
+      window.Echo.connector.socket.on('connect', (err) => {
+        this.list_messages.unshift({message: 'Connect success'})
+      })
+
+      window.Echo.connector.socket.on('subscription_error', (channel, data) => {
+        this.list_messages.unshift({message: 'Authorization fail!'})
       })
 
       this.updateSuggestionList('echo-client-channel', this.channel)
