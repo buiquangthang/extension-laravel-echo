@@ -64,30 +64,30 @@
 import { mapState, mapActions } from 'vuex'
 
 export default {
-    name: 'Login',
-    data () {
-        return {
-            email: '',
-            password: '',
-            submitted: false
-        }
-    },
-    computed: {
-        ...mapState('account', ['status'])
-    },
-    created () {
-        // reset login status
-        this.logout();
-    },
-    methods: {
-        ...mapActions('account', ['login', 'logout']),
-        handleSubmit (e) {
-            this.submitted = true;
-            const { email, password } = this;
-            if (email && password) {
-                this.login({ username, password })
-            }
-        }
+  name: 'Login',
+  data () {
+    return {
+      email: '',
+      password: '',
+      submitted: false
     }
-};
+  },
+  computed: {
+    ...mapState('account', ['status'])
+  },
+  created () {
+    // reset login status
+    this.logout()
+  },
+  methods: {
+    ...mapActions('account', ['login', 'logout']),
+    handleSubmit (e) {
+      this.submitted = true
+      const { email, password } = this
+      if (email && password) {
+        this.login({ username, password })
+      }
+    }
+  }
+}
 </script>

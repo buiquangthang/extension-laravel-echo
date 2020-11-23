@@ -16,7 +16,7 @@ export const router = new Router({
     { path: '/',
       component: AppLayout,
       children: [
-        { path: '', name: 'EchoClient', component: EchoClient },
+        { path: '', name: 'EchoClient', component: EchoClient }
       ]
     },
     {

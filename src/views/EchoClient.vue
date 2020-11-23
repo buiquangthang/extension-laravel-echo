@@ -138,7 +138,7 @@ export default {
     }
   },
   methods: {
-    connectServer() {
+    connectServer () {
       window.Echo = new Echo({
         broadcaster: this.$parent.broadcaster,
         host: this.$parent.domain,
@@ -147,7 +147,7 @@ export default {
       })
 
       window.Echo.connector.socket.on('connect_error', (err) => {
-          this.list_messages.unshift({message: 'Error connecting to server'})
+        this.list_messages.unshift({message: 'Error connecting to server'})
       })
 
       window.Echo.connector.socket.on('connect', (err) => {
@@ -171,17 +171,17 @@ export default {
         {
           headers:
           {
-            'Authorization': this.token,
+            'Authorization': this.token
           }
         }
       })
 
       window.Echo.channel(this.channel).listen(this.event, (data) => {
-          this.list_messages.unshift(data)
+        this.list_messages.unshift(data)
       })
 
       window.Echo.connector.socket.on('connect_error', (err) => {
-          this.list_messages.unshift({message: 'Error connecting to server'})
+        this.list_messages.unshift({message: 'Error connecting to server'})
       })
 
       window.Echo.connector.socket.on('connect', (err) => {
