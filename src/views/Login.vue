@@ -19,7 +19,7 @@
                   <form class="user" @submit.prevent="handleSubmit">
                     <div class="form-group">
                       <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                        v-model="email" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+                        v-model="username" aria-describedby="emailHelp" placeholder="Enter Email Address...">
                     </div>
                     <div class="form-group">
                       <input type="password" class="form-control form-control-user" id="exampleInputPassword"
@@ -31,9 +31,9 @@
                         <label class="custom-control-label" for="customCheck">Remember Me</label>
                       </div>
                     </div>
-                    <a href="index.html" class="btn btn-primary btn-user btn-block">
+                    <button class="btn btn-primary btn-user btn-block">
                       Login
-                    </a>
+                    </button>
                     <hr>
                     <a href="index.html" class="btn btn-google btn-user btn-block">
                       <i class="fab fa-google fa-fw"></i> Login with Google
@@ -67,7 +67,7 @@ export default {
   name: 'Login',
   data () {
     return {
-      email: '',
+      username: '',
       password: '',
       submitted: false
     }
@@ -83,8 +83,8 @@ export default {
     ...mapActions('account', ['login', 'logout']),
     handleSubmit (e) {
       this.submitted = true
-      const { email, password } = this
-      if (email && password) {
+      const { username, password } = this
+      if (username && password) {
         this.login({ username, password })
       }
     }
