@@ -3,56 +3,56 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="card shadow mb-4">
-        <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Connect Information</h6>
-        </div>
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Connect Information</h6>
+          </div>
 
-        <div class="card-body">
-          <div class="user">
-            <div class="form-group row">
-              <div class="col-sm-6 mb-3 mb-sm-0">
-                <vue-simple-suggest
-                  v-model="channel"
-                  placeholder="Input Your Channel"
-                  :styles="autoCompleteStyle"
-                  :list='getSuggestionList("echo-client-channel")'
-                  :filter-by-query="true">
-                </vue-simple-suggest>
-              </div>
-
-              <div class="col-sm-6">
-                <vue-simple-suggest
-                  v-model="event"
-                  placeholder="Input Your Event"
-                  :styles="autoCompleteStyle"
-                  :list='getSuggestionList("echo-client-event")'
-                  :filter-by-query="true">
-                </vue-simple-suggest>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-sm-6">
-                  <input type="text" class="form-control" id="token"
-                    v-model="token" placeholder="Input Your Token" name="token">
-              </div>
-
-              <div class="col-sm-6 mb-3 mb-sm-0 row">
+          <div class="card-body">
+            <div class="user">
+              <div class="form-group row">
                 <div class="col-sm-6 mb-3 mb-sm-0">
-                  <button @click="connectChannel" class="btn btn-primary btn-user btn-block">
-                    Connect
-                  </button>
+                  <vue-simple-suggest
+                    v-model="channel"
+                    placeholder="Input Your Channel"
+                    :styles="autoCompleteStyle"
+                    :list='getSuggestionList("echo-client-channel")'
+                    :filter-by-query="true">
+                  </vue-simple-suggest>
                 </div>
 
-                <div class="col-sm-6 mb-3 mb-sm-0">
-                  <button @click="disconnectChannel" class="btn btn-google btn-user btn-block">
-                    Leave
-                  </button>
+                <div class="col-sm-6">
+                  <vue-simple-suggest
+                    v-model="event"
+                    placeholder="Input Your Event"
+                    :styles="autoCompleteStyle"
+                    :list='getSuggestionList("echo-client-event")'
+                    :filter-by-query="true">
+                  </vue-simple-suggest>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="token"
+                      v-model="token" placeholder="Input Your Token" name="token">
+                </div>
+
+                <div class="col-sm-6 mb-3 mb-sm-0 row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <button @click="connectChannel" class="btn btn-primary btn-user btn-block">
+                      Connect
+                    </button>
+                  </div>
+
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <button @click="disconnectChannel" class="btn btn-google btn-user btn-block">
+                      Leave
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
 
@@ -70,18 +70,16 @@
               <pre v-html="prettyAreaData" size="100"></pre>
             </div>
           </div>
-          </div>
         </div>
+      </div>
 
-        <div class="col-lg-4">
-          <div class="card shadow mb-4">
-            <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Your History</h6>
-            </div>
-
-            <div class="card-body">
-            </div>
+      <div class="col-lg-4">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Your History</h6>
           </div>
+
+          <div class="card-body"></div>
         </div>
       </div>
     </div>

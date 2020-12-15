@@ -7,11 +7,11 @@ import * as VeeValidate from 'vee-validate'
 
 import { store } from './_store/index.js'
 
-Vue.use(VeeValidate)
-Vue.use(Vuex)
-
 // setup fake backend
 import { configureFakeBackend } from './_helpers'
+
+Vue.use(VeeValidate)
+Vue.use(Vuex)
 configureFakeBackend()
 
 Vue.config.productionTip = false
