@@ -200,6 +200,25 @@ export default {
     },
 
     updateSuggestionList (storageKey, data) {
+      this.putDataToList(storageKey, data)
+    },
+
+    getSuggestionList (storageKey) {
+      return JSON.parse(localStorage.getItem(storageKey))
+    },
+
+    saveCollection () {
+      // TODO: replace local storage by API
+      let list = []
+      let collectionKey = 'collection_domain'
+      let collectionName = this.$parent.domain
+      let eventData = this.event
+
+      this.putDataToList(collectionKey, collectionName)
+      this.putDataToList(collectionName, eventData)
+    },
+
+    putDataToList (storageKey, data) {
       let list = []
 
       if (localStorage.getItem(storageKey) !== undefined) {
@@ -214,10 +233,6 @@ export default {
       }
 
       localStorage.setItem(storageKey, JSON.stringify(list))
-    },
-
-    getSuggestionList (storageKey) {
-      return JSON.parse(localStorage.getItem(storageKey))
     }
   }
 }
