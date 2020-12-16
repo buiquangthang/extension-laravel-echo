@@ -16,9 +16,13 @@ configureFakeBackend()
 
 Vue.config.productionTip = false
 
-new Vue({
+let vm = new Vue({
   router: router,
   store: store,
   render: h => h(App),
   el: '#app'
+})
+
+Vue.use({
+  vm
 })

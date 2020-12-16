@@ -145,11 +145,19 @@ export default {
       })
 
       window.Echo.connector.socket.on('connect_error', (err) => {
-        this.list_messages.unshift({message: 'Error connecting to server'})
+        if (err) {
+          console.log(err)
+        } else {
+          this.list_messages.unshift({message: 'Error connecting to server'})
+        }
       })
 
       window.Echo.connector.socket.on('connect', (err) => {
-        this.list_messages.unshift({message: 'Connect success'})
+        if (err) {
+          console.log(err)
+        } else {
+          this.list_messages.unshift({message: 'Connect success'})
+        }
       })
 
       window.Echo.connector.socket.on('subscription_error', (channel, data) => {
@@ -179,11 +187,19 @@ export default {
       })
 
       window.Echo.connector.socket.on('connect_error', (err) => {
-        this.list_messages.unshift({message: 'Error connecting to server'})
+        if (err) {
+          console.log(err)
+        } else {
+          this.list_messages.unshift({message: 'Error connecting to server'})
+        }
       })
 
       window.Echo.connector.socket.on('connect', (err) => {
-        this.list_messages.unshift({message: 'Connect success'})
+        if (err) {
+          console.log(err)
+        } else {
+          this.list_messages.unshift({message: 'Connect success'})
+        }
       })
 
       window.Echo.connector.socket.on('subscription_error', (channel, data) => {
@@ -209,7 +225,6 @@ export default {
 
     saveCollection () {
       // TODO: replace local storage by API
-      let list = []
       let collectionKey = 'collection_domain'
       let collectionName = this.$parent.domain
       let eventData = this.event

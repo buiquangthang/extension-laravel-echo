@@ -26,22 +26,21 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider">
-
-        <li class="nav-item">
-          <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Collections</span>
-          </a>
-          <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities" data-parent="#accordionSidebar" style="">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <h6 class="collapse-header">Custom Utilities:</h6>
-              <a class="collapse-item" href="#">Colors</a>
-              <a class="collapse-item" href="#">Borders</a>
-              <a class="collapse-item" href="#">Animations</a>
-              <a class="collapse-item" href="#">Other</a>
+        <span v-for="(domain, index) in collections" v-bind:key="index">
+          <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" :data-target="`#collapseUtilities_`+index" aria-expanded="false" aria-controls="collapseUtilities">
+              <i class="fas fa-fw fa-folder"></i>
+              <span>{{ domain }}</span>
+            </a>
+            <div :id="`collapseUtilities_`+index" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar" style="">
+              <div class="bg-white py-2 collapse-inner rounded">
+                <span v-for="event in getEvents(domain)" v-bind:key="event">
+                  <a class="collapse-item" href="#">{{ event }}</a>
+                </span>
+              </div>
             </div>
-          </div>
-        </li>
+          </li>
+        </span>
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
@@ -243,7 +242,8 @@ export default {
   data () {
     return {
       domain: '',
-      broadcaster: ''
+      broadcaster: '',
+      collections: JSON.parse(localStorage.getItem('collection_domain')) || []
     }
   },
 
@@ -254,6 +254,10 @@ export default {
 
     saveCollection () {
       this.$refs.pubSubClient.saveCollection()
+    },
+
+    getEvents (domain) {
+      return JSON.parse(localStorage.getItem(domain)) || []
     }
   }
 }
