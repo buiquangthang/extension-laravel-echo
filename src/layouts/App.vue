@@ -212,7 +212,7 @@
           </nav>
           <!-- End of Topbar -->
 
-          <router-view ref="pubSubClient"/>
+          <EchoClient v-on:add-new="updateCollections"></EchoClient>
 
         </div>
         <!-- End of Main Content -->
@@ -235,10 +235,15 @@
 </template>
 
 <script>
+import EchoClient from '@/views/EchoClient.vue'
+import EventBus from '@/shared/event-bus'
 window.io = require('socket.io-client')
 
 export default {
   name: 'AppLayout',
+  components: {
+    EchoClient
+  },
   data () {
     return {
       domain: '',
@@ -249,15 +254,19 @@ export default {
 
   methods: {
     connectServer () {
-      this.$refs.pubSubClient.connectServer()
+      EventBus.$emit('connectServer', true)
     },
 
     saveCollection () {
-      this.$refs.pubSubClient.saveCollection()
+      EventBus.$emit('saveCollection', true)
     },
 
     getEvents (domain) {
       return JSON.parse(localStorage.getItem(domain)) || []
+    },
+
+    updateCollections () {
+      this.collections = JSON.parse(localStorage.getItem('collection_domain')) || []
     }
   }
 }

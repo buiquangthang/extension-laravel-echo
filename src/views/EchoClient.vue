@@ -90,6 +90,8 @@
 import Echo from 'laravel-echo'
 import VueSimpleSuggest from 'vue-simple-suggest'
 import 'vue-simple-suggest/dist/styles.css'
+import EventBus from '@/shared/event-bus'
+
 window.io = require('socket.io-client')
 
 export default {
@@ -113,7 +115,19 @@ export default {
     }
   },
 
-  created () {},
+  mounted () {
+    EventBus.$on('saveCollection', (res) => {
+      console.log(res.this)
+      const _this = this
+      _this.saveCollection()
+    })
+
+    EventBus.$on('connectServer', (res) => {
+      console.log(res.this)
+      const _this = this
+      _this.connectServer()
+    })
+  },
   computed: {
     prettyAreaData: function () {
       let json = JSON.stringify(this.list_messages, null, 2)
@@ -141,7 +155,8 @@ export default {
         broadcaster: this.$parent.broadcaster,
         host: this.$parent.domain,
         reconnection: true,
-        reconnectionAttempts: 3
+        reconnectionAttempts: 3,
+        transports: ['websocket']
       })
 
       window.Echo.connector.socket.on('connect_error', (err) => {
@@ -164,6 +179,7 @@ export default {
         this.list_messages.unshift({message: 'Authorization fail!'})
       })
     },
+
     connectChannel () {
       this.list_messages = []
       window.Echo.leave(this.channel)
@@ -173,6 +189,7 @@ export default {
         host: this.$parent.domain,
         reconnection: true,
         reconnectionAttempts: 3,
+        transports: ['websocket', 'polling'],
         auth:
         {
           headers:
@@ -231,6 +248,7 @@ export default {
 
       this.putDataToList(collectionKey, collectionName)
       this.putDataToList(collectionName, eventData)
+      this.$emit('add-new', true)
     },
 
     putDataToList (storageKey, data) {
@@ -248,6 +266,10 @@ export default {
       }
 
       localStorage.setItem(storageKey, JSON.stringify(list))
+    },
+
+    beforeDestroy () {
+      EventBus.$off('saveCollection')
     }
   }
 }
