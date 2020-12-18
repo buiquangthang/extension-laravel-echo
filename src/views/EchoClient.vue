@@ -33,7 +33,7 @@
 
               <div class="form-group row">
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" id="token"
+                    <input type="text" class="default-input form-control" id="token"
                       v-model="token" placeholder="Input Your Token" name="token">
                 </div>
 
@@ -126,6 +126,11 @@ export default {
       console.log(res.this)
       const _this = this
       _this.connectServer()
+    })
+
+    EventBus.$on('initEventData', (res) => {
+      const _this = this
+      _this.initEventData(res)
     })
   },
   computed: {
@@ -244,10 +249,18 @@ export default {
       // TODO: replace local storage by API
       let collectionKey = 'collection_domain'
       let collectionName = this.$parent.domain
-      let eventData = this.event
+      let event = this.event
+      let eventData = {}
+      eventData['domain'] = this.$parent.domain
+      eventData['broadcaster'] = this.$parent.broadcaster
+      eventData['channel'] = this.channel
+      eventData['event'] = event
+      eventData['token'] = this.token
 
       this.putDataToList(collectionKey, collectionName)
-      this.putDataToList(collectionName, eventData)
+      this.putDataToList(collectionName, event)
+      localStorage.setItem(event, JSON.stringify(eventData))
+
       this.$emit('add-new', true)
     },
 
@@ -268,8 +281,15 @@ export default {
       localStorage.setItem(storageKey, JSON.stringify(list))
     },
 
+    initEventData (eventData) {
+      this.channel = eventData.channel
+      this.event = eventData.event
+      this.token = eventData.token
+    },
+
     beforeDestroy () {
       EventBus.$off('saveCollection')
+      EventBus.$off('connectServer')
     }
   }
 }
