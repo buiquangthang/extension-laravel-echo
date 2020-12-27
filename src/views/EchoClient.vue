@@ -161,7 +161,7 @@ export default {
         host: this.$parent.domain,
         reconnection: true,
         reconnectionAttempts: 3,
-        transports: ['websocket']
+        transports: ['websocket', 'polling']
       })
 
       window.Echo.connector.socket.on('connect_error', (err) => {
@@ -187,7 +187,10 @@ export default {
 
     connectChannel () {
       this.list_messages = []
-      window.Echo.leave(this.channel)
+
+      if (typeof window.Echo !== 'undefined') {
+        window.Echo.leave(this.channel)
+      }
 
       window.Echo = new Echo({
         broadcaster: this.$parent.broadcaster,

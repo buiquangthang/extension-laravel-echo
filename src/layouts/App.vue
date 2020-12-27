@@ -22,6 +22,10 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
           </router-link>
+          <router-link to="/" class='nav-link'>
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </router-link>
         </li>
 
         <!-- Divider -->
@@ -138,7 +142,7 @@
               <!-- Nav Item - Messages -->
               <li class="nav-item dropdown no-arrow mx-1">
                 <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="fas fa-envelope fa-fw"></i>
+                  <i class="fas fa-eye"></i>
                   <!-- Counter - Messages -->
                   <span class="badge badge-danger badge-counter">1</span>
                 </a>
@@ -228,7 +232,7 @@
           </nav>
           <!-- End of Topbar -->
 
-          <EchoClient v-on:add-new="updateCollections"></EchoClient>
+          <router-view v-on:add-new="updateCollections"></router-view>
 
         </div>
         <!-- End of Main Content -->

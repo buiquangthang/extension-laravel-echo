@@ -6,6 +6,7 @@ import ForgotPassword from './views/ForgotPassword'
 import EchoClient from './views/EchoClient'
 import AppLayout from './layouts/App'
 import PublicLayout from './layouts/Public'
+import SettingEnvironment from './views/SettingEnvironment'
 
 Vue.use(Router)
 
@@ -15,7 +16,8 @@ export const router = new Router({
     { path: '/',
       component: AppLayout,
       children: [
-        { path: '', name: 'EchoClient', component: EchoClient }
+        { path: '', name: 'EchoClient', component: EchoClient },
+        { path: 'setting_env', name: 'SettingEnvironment', component: SettingEnvironment }
       ]
     },
     {
