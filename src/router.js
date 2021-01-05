@@ -7,6 +7,7 @@ import EchoClient from './views/EchoClient'
 import AppLayout from './layouts/App'
 import PublicLayout from './layouts/Public'
 import SettingEnvironment from './views/SettingEnvironment'
+import SubscriptionManagement from './views/SubscriptionManagement'
 
 Vue.use(Router)
 
@@ -17,7 +18,8 @@ export const router = new Router({
       component: AppLayout,
       children: [
         { path: '', name: 'EchoClient', component: EchoClient },
-        { path: 'setting', name: 'SettingEnvironment', component: SettingEnvironment }
+        { path: 'setting', name: 'SettingEnvironment', component: SettingEnvironment },
+        { path: 'payment', name: 'SubscriptionManagement', component: SubscriptionManagement }
       ]
     },
     {
