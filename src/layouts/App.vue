@@ -22,9 +22,9 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
           </router-link>
-          <router-link to="/" class='nav-link'>
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
+          <router-link to="/setting" class='nav-link'>
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Setting</span>
           </router-link>
         </li>
 
