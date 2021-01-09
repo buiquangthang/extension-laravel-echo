@@ -14,7 +14,7 @@
           </div>
 
           <div class="card-body">
-            <vue-editortable :data="{ columns, options, styling }"></vue-editortable>
+            <editable :data="{ columns, options, styling }"></editable>
           </div>
         </div>
       </div>
@@ -33,45 +33,45 @@
 </template>
 
 <script>
-import VueEditortable from "vue-editortable"
+import Editable from '@/components/Editable/Editable.vue'
 
 export default {
   name: 'setting',
   components: {
-    VueEditortable,
+    Editable
   },
-  data() {
-      return {
-        columns: [
-          {
-            title: 'Id',
-            name: 'id',
-            editable: false,
-          },
-          {
-            title: 'Firstname',
-            name: 'first_name',
-            editable: true,
-          },
-          {
-            title: 'Lastname',
-            name: 'last_name',
-            editable: true,
-          },
-          {
-            title: 'Email',
-            name: 'email',
-            editable: true,
-          },
-        ],
-        options: {
-          showSearchFilter: false,
-          requests: {
-            getUrl: 'https://reqres.in/api/users',
-          },
+  data () {
+    return {
+      columns: [
+        {
+          title: 'Id',
+          name: 'id',
+          editable: false
         },
-        styling: 'customdark',
-      };
-    },
+        {
+          title: 'Firstname',
+          name: 'first_name',
+          editable: true
+        },
+        {
+          title: 'Lastname',
+          name: 'last_name',
+          editable: true
+        },
+        {
+          title: 'Email',
+          name: 'email',
+          editable: true
+        }
+      ],
+      options: {
+        showSearchFilter: false,
+        requests: {
+          getUrl: 'https://reqres.in/api/users'
+        }
+      },
+      styling: 'customdark'
+    }
+  }
 }
 </script>
