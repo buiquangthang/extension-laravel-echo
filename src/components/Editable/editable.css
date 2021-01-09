@@ -1,0 +1,318 @@
+
+@import "http://fonts.googleapis.com/css?family=Open+Sans:300,400,700";
+
+/* Helpers */
+.align-l {
+  text-align: left;
+}
+
+/* custom dark styles */
+#wrapper {
+  /*width: 100%;*/
+  margin: 20px;
+}
+.open-sans {
+  font-family: 'Open Sans';
+}
+#showColumnsModal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+#showColumnsModal ul {
+  position: relative;
+  border-radius: 10px;
+  padding: 50px 100px;
+  background-color: #fff;
+  list-style: none;
+}
+.fa-icon.modalTimes {
+  z-index: 10000;
+  position: absolute;
+  top: 10px;
+  right: 10px; 
+  height: 1.4em; 
+}
+.vet-btn {
+  margin: 0 5px;
+  padding: 5px 10px;
+  background-color: #fff;
+  color: #112B38;
+  border: 1px solid #112B38;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.vet-btn:hover {
+  background-color: #B2C61D;
+}
+.vet-btn.active {
+  background-color: #B2C61D;
+}
+.vet-btn.disabled.points {
+  color: #000;
+}
+.vet-btn.disabled {
+  cursor: default;
+  color: lightgrey;
+  border: 1px solid lightgrey;
+}
+.vet-btn.disabled:hover {
+  background-color: #fff;
+}
+.icon-vet-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-flow: row nowrap;
+}
+.vet-btn-group {
+  display: flex;
+}
+.row {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+.fa-icon {
+  width: auto;
+  top: 2px;
+  position: relative;
+}
+.fa-icon.sorting {
+  height: 0.8em;
+  padding: 0 2px; 
+  top: 0;
+}
+.fa-icon.refresh {
+  fill: #B2C61D;
+  height: 4em;
+}
+.fa-icon.spinner {
+  fill: #B2C61D;
+  height: 0.9em;
+}
+.spinner-wrapper {
+  position: absolute;
+  right: 5px;
+  top: 0;
+}
+table.custom-dark {
+  /*width: 100%;*/
+  font-size: 18px;
+  color: #fff;
+  /*margin: 50px;*/
+  border-radius: .4em;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.custom-dark th {
+  /*width: 1px;*/
+  text-align: left;
+}
+.custom-dark th, .custom-dark td:before {
+  color: #B2C61D;
+}
+.custom-dark th, .custom-dark td {
+  /*display: table-cell;*/
+  padding: 14px !important;
+  /*margin: .5em 1em;*/
+  /*border: none;*/
+  /*white-space: nowrap;*/
+}
+.custom-dark thead tr {
+  background-color: #112B38;
+}
+.custom-dark tbody tr:nth-child(odd) td {
+  border: 2px solid #194764;
+}
+.custom-dark tbody tr:nth-child(odd),
+.custom-dark tbody tr:nth-child(odd) input[type="text"] {
+  background-color: #194764;
+}
+.custom-dark tbody tr:nth-child(even) td {
+  border: 2px solid #163D55;
+}
+.custom-dark tbody tr:nth-child(even),
+.custom-dark tbody tr:nth-child(even) input[type="text"] {
+  background-color: #163D55;
+}
+.custom-dark th:first-child, .custom-dark td:first-child {
+  padding-left: 0;
+}
+.custom-dark th:last-child, .custom-dark td:last-child {
+  padding-right: 0;
+}
+.custom-dark td:first-child {
+  padding-top: .5em;
+}
+.custom-dark td:last-child {
+  padding-bottom: .5em;
+}
+.custom-dark input[type="text"] {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-size: 18px;
+  font-family: 'Open Sans';
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+  border: none;
+  color: #fff;
+  box-sizing:border-box;
+}
+.custom-dark input[type="text"]:focus {
+  outline: none; 
+}
+.custom-dark th.active {
+  color: #fff;
+}
+.custom-dark tbody tr.activeRow td {
+  border: 2px solid #2E7CA4;
+  background-color: #2E7CA4;
+}
+.custom-dark tbody tr td.activeCell {
+  border: 2px solid #B2C61D;
+}
+.custom-dark tbody tr input[type="text"].activeCell {
+  background-color: #2E7CA4;
+}
+.cell-wrapper {
+  position: relative;
+}
+#top-menu {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+#top-menu #search {
+  margin-left: 5px;
+  height: 30px;
+  font-size: 18px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+#top-menu #search:focus {
+  outline: none !important;
+  border: 1px solid #B2C61D;
+  /*box-shadow: 0 0 10px;*/
+}
+#top-menu .btn-group {
+  flex-flow: row wrap;
+}
+#lodingScreen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center
+}
+#pagination {
+  margin-top: 20px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+#pagination a.btn.disabled:hover {
+  background-color: #fff;
+}
+.validation-error {
+  color: rgb(208, 0, 0);
+  font-size: 0.8em;
+}
+
+@media only screen and (max-width: 713px) {
+  table.custom-dark {
+    width: 100%;
+  }
+  .custom-dark td:before {
+    content: attr(data-th) ": ";
+    font-weight: bold;
+    width: 6.5em;
+    display: inline-block;
+    text-transform: capitalize;
+  }
+  .custom-dark th {
+    display: none;
+  }
+  .custom-dark td {
+    padding: .25em .5em;
+    text-align: left;
+    display: block;
+  }
+  .cell-wrapper {
+    display: inline-block;
+  }
+  #top-menu .btn {
+    margin: 0 20px 20px 0;
+  }
+  #top-menu input[type="text"] {
+    margin: 0 20px 20px 0;
+  }
+  .swipe-btns {
+    display: none;
+  }
+  #pagination {
+    flex-flow: column nowrap;
+  }
+  #pagination .row {
+    margin: 0 0 20px 0;
+  }
+  #pagination .numbers .btn {
+    font-size: 10px;
+    margin: 0 2px;
+    padding: 3px 6px;
+  }
+}
+@media only screen and (max-width: 400px) {
+  body {
+    margin: 0;
+  }
+  #wrapper {
+    margin: 0;
+  }
+  #top-menu, #pagination {
+    margin: 10px;
+  }
+}
+
+/* Vuetify */
+.pagination-btn {
+  min-width: auto;
+  padding: 0 10px;
+}
+.pagination-btn-active {
+  background-color: rgba(0,0,0,.3)
+}
+.modal-card {
+  background-color: #fff;
+}
+.vet-toolbar {
+  z-index: 2;
+}
+.datatable tbody tr.activeRow td {
+  /*border: 2px solid #2E7CA4;*/
+  /*background-color: #2E7CA4;*/
+  background: rgba(0,0,0,.12);
+}
+.datatable tbody tr td.activeCell {
+  /*border: 1px solid #000;*/
+  background: rgba(0,0,0,.35);
+  color: #fff;
+}
+.datatable tbody tr input[type="text"].activeCell {
+  /*background: rgba(0,0,0,.12);*/
+}
+.datatable input[type="text"]:focus {
+  outline: none; 
+}
