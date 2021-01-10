@@ -155,7 +155,7 @@ export default {
         for (let i = 0; i < ths.length; i += 1) {
           vm.columnsWidth.push(ths[i].offsetWidth)
         }
-        vm.setColumnsWidth()
+        // vm.setColumnsWidth()
       })
     },
     setColumnsWidth () {
@@ -186,8 +186,8 @@ export default {
       if (vm.initTableWidth === 0) {
         vm.initTableWidth = vm.tableWidth
       }
-      vm.getWrapperWidth()
-      vm.setTableWidth()
+      // vm.getWrapperWidth()
+      // vm.setTableWidth()
     },
     getWrapperWidth () {
       const vm = this

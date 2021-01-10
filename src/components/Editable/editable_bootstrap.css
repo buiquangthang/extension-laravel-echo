@@ -1,0 +1,42 @@
+table.editable {
+  /*width: 100%;*/
+  /*margin: 50px;*/
+  border-radius: .4em;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.editable th, .editable td {
+  /*display: table-cell;*/
+  padding: 14px !important;
+  /*margin: .5em 1em;*/
+  /*border: none;*/
+  /*white-space: nowrap;*/
+}
+
+.editable input[type="text"] {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+  border: none;
+  box-sizing:border-box;
+}
+.editable input[type="text"]:focus {
+  outline: none; 
+}
+.editable th.active {
+  color: #fff;
+}
+.editable tbody tr.activeRow td {
+  border: 2px solid #c9e5f4;
+  background-color: #c9e5f4;
+}
+.editable tbody tr td.activeCell {
+  border: 2px solid #3d81bd;
+}
+.editable tbody tr input[type="text"].activeCell {
+  background-color: #c9e5f4;
+}
