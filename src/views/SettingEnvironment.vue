@@ -99,7 +99,9 @@ export default {
       options: {
         showSearchFilter: false,
         requests: {
-          getUrl: 'https://reqres.in/api/users'
+          getUrl: 'https://reqres.in/api/users',
+          postUrl: 'https://reqres.in/api/users',
+          patchUrl: 'https://reqres.in/api/users'
         }
       },
     }

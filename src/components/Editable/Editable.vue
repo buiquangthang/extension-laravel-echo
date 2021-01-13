@@ -40,8 +40,8 @@
     <table class="editable table" ref="table">
       <thead>
         <tr>
-          <th v-for="col in cols" v-bind:key="col" v-show="!col.hidden && col.show" ref="tableHead">
-          {{ col.title }}
+          <th v-for="(col, colIndex) in cols" v-bind:key="colIndex" v-show="!col.hidden && col.show" ref="tableHead">
+            {{ col.title }}
           </th>
         </tr>
       </thead>
@@ -49,24 +49,33 @@
         <tr v-for="(row, rowIndex) in filteredData" v-bind:key="rowIndex"
           @click="setSelection(filteredData[rowIndex].id.value, $event)"
           :class="[selectedRowArray.indexOf(filteredData[rowIndex].id.value) >= 0 ? 'activeRow' : '']">
-          <td v-for="(cell, key, index) in row" v-bind:key="index"
+          <td v-for="(cell, key) in row" v-bind:key="cell.id"
             @click="setTarget(rowIndex, key)"
             v-show="!cell.isHidden && cell.show"
             :class="[cell.isActive ? 'activeCell' : '']"
             :data-th="key">
+
             <div class="cell-wrapper">
-              <div class="dsdf" v-show="!cell.isActive || !cell.isEditable" ref="span">{{ cell.value }}</div>
-              <input
-                :type="key == 'id' ? 'checkbox' : 'text'"
-                name="cell"
+              <div v-show="(!cell.isActive || !cell.isEditable) && key != 'id'" ref="span">{{ cell.value }}</div>
+              <input v-if="key === 'id'"
+                type="checkbox"
+                :name="key + '-' + rowIndex"
                 spellcheck="false"
-                v-show="cell.isActive && cell.isEditable"
+                :id="key + '-' + rowIndex"
+                v-show="(cell.isActive && cell.isEditable) || key == 'id'"
+                v-model="cell.selected"
+                @change="saveData(rowIndex, key, cell.selected, filteredData[rowIndex].id.value)"
+                :class="[cell.isActive ? 'activeCell' : '']"
+                ref="inputFields">
+
+              <input v-if="key !== 'id'"
+                type="text"
+                :name="key + '-' + rowIndex"
+                spellcheck="false"
+                :id="key + '-' + rowIndex"
+                v-show="(cell.isActive && cell.isEditable) || key == 'id'"
                 v-model="thisCell.value"
-                @change="saveData(rowIndex, key, thisCell.value, filteredData[rowIndex].id.value, $event)"
-                @keydown.shift.left="selectCell(rowIndex, index, $event)"
-                @keydown.shift.right="selectCell(rowIndex, index, $event)"
-                @keydown.up="selectCell(rowIndex, index, $event)"
-                @keydown.down="selectCell(rowIndex, index, $event)"
+                @change="saveData(rowIndex, key, thisCell.value, filteredData[rowIndex].id.value)"
                 :class="[cell.isActive ? 'activeCell' : '']"
                 ref="inputFields">
               <div v-show="savingIndex == rowIndex && savingKey == key" class="spinner-wrapper">

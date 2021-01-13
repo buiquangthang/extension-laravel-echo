@@ -11,7 +11,7 @@
           <span @click="setShowColumnsModal()">
             <icon name="times" class="modalTimes"></icon>
           </span>
-          <li v-for="(col, index) in cols">
+          <li v-for="(col, index) in cols" v:key="index">
             <input type="checkbox" :name="col.name" :id="col.name" v-model="col.show" @change="updateShowColumns(index)">
             <label :for="col.name">{{ col.name }}</label>
           </li>

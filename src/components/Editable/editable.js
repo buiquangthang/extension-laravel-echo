@@ -575,6 +575,7 @@ export default {
         vm.savingIndex = false
       }
       if (errors.length === 0) {
+
         const postData = {}
         postData[key] = value
         const data = postData
@@ -779,7 +780,10 @@ export default {
         vm.activeCell.page = this.currentPage
         vm.$set(vm.filteredData[rowIndex][key], 'isActive', true)
         vm.$nextTick(() => {
-          document.querySelector('input[name=cell].activeCell').focus()
+          const selector = document.querySelector('input[name=cell].activeCell');
+          if(!!selector) {
+              selector.focus()
+          }
         })
       } else {
         vm.$set(vm.activeCell, 'isActive', false)
