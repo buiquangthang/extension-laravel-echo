@@ -77,7 +77,8 @@ export default {
         {
           title: 'Id',
           name: 'id',
-          editable: false
+          editable: true,
+          show: true
         },
         {
           title: 'Variable',
@@ -88,12 +89,14 @@ export default {
           title: 'Value',
           name: 'value',
           editable: true
-        },
+        }
       ],
       options: {
         showSearchFilter: false,
         requests: {
-          getUrl: 'https://reqres.in/api/users'
+          getUrl: 'https://reqres.in/api/users',
+          postUrl: 'https://reqres.in/api/users',
+          patchUrl: 'https://reqres.in/api/users'
         }
       }
     }

@@ -483,7 +483,10 @@ export default {
         vm.activeCell.page = this.currentPage
         vm.$set(vm.filteredData[rowIndex][key], 'isActive', true)
         vm.$nextTick(() => {
-          document.querySelector('input[name=cell].activeCell').focus()
+          const selector = document.querySelector('input[name=cell].activeCell')
+          if (selector) {
+            selector.focus()
+          }
         })
       } else {
         vm.$set(vm.activeCell, 'isActive', false)

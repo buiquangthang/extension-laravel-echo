@@ -11,7 +11,11 @@
           <span @click="setShowColumnsModal()">
             <icon name="times" class="modalTimes"></icon>
           </span>
+<<<<<<< HEAD
           <li v-for="(col, index) in cols">
+=======
+          <li v-for="(col, index) in cols" v:key="index">
+>>>>>>> 59fe553a1dcc8a8f31b7f371b2c33c6c9a7cbf8c
             <input type="checkbox" :name="col.name" :id="col.name" v-model="col.show" @change="updateShowColumns(index)">
             <label :for="col.name">{{ col.name }}</label>
           </li>
@@ -94,4 +98,8 @@
 </template>
 
 <script src="./editable.js"></script>
+<<<<<<< HEAD
 <style src="./editable_dark.css"></style>
+=======
+<style src="./editable_dark.css"></style>
+>>>>>>> 59fe553a1dcc8a8f31b7f371b2c33c6c9a7cbf8c
