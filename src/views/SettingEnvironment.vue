@@ -80,27 +80,22 @@ export default {
           editable: false
         },
         {
-          title: 'Firstname',
-          name: 'first_name',
+          title: 'Variable',
+          name: 'variable',
           editable: true
         },
         {
-          title: 'Lastname',
-          name: 'last_name',
+          title: 'Value',
+          name: 'value',
           editable: true
         },
-        {
-          title: 'Email',
-          name: 'email',
-          editable: true
-        }
       ],
       options: {
         showSearchFilter: false,
         requests: {
           getUrl: 'https://reqres.in/api/users'
         }
-      },
+      }
     }
   }
 }

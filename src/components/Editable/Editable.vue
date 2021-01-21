@@ -9,7 +9,7 @@
         <span @click="setShowColumnsModal()">
           <icon name="times" class="modalTimes"></icon>
         </span>
-        <li v-for="(col, index) in cols">
+        <li v-for="(col, index) in cols" v-bind:key="index">
           <input type="checkbox" :name="col.name" :id="col.name" v-model="col.show" @change="updateShowColumns(index)">
           <label :for="col.name">{{ col.name }}</label>
         </li>
@@ -40,16 +40,16 @@
     <table class="editable table" ref="table">
       <thead>
         <tr>
-          <th v-for="col in cols" ref="tableHead">
+          <th v-for="(col, colIndex) in cols" ref="tableHead" v-bind:key="colIndex" >
           {{ col.title }}
           </th>
         </tr>
       </thead>
       <tbody v-if="!loading">
-        <tr v-for="(row, rowIndex) in filteredData"
+        <tr v-for="(row, rowIndex) in filteredData" v-bind:key="rowIndex"
           @click="setSelection(filteredData[rowIndex].id.value, $event)"
           :class="[selectedRowArray.indexOf(filteredData[rowIndex].id.value) >= 0 ? 'activeRow' : '']">
-          <td v-for="(cell, key, index) in row"
+          <td v-for="(cell, key, index) in row" v-bind:key="index"
             @click="setTarget(rowIndex, key)"
             :class="[cell.isActive ? 'activeCell' : '']"
             :data-th="key">
