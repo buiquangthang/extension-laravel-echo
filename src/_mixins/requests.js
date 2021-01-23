@@ -1,5 +1,5 @@
+import { data } from 'autoprefixer'
 import axios from 'axios'
-import { error } from 'shelljs'
 
 const DB_NAME = 'catdb'
 const DB_VERSION = 1
@@ -32,50 +32,66 @@ export default {
     },
     getData (url, cb, errorCb) {
       // axios.get(url).then(cb).catch(errorCb)
-      this.getCats().then(cb).catch(errorCb)
+      this.getDataFromDb().then(cb).catch(errorCb)
     },
     postData (url, data, cb, errorCb) {
       // axios.post(url, data).then(cb).catch(errorCb)
-      (new Promise((resolve, reject) => {
-        let trans = this.db.transaction(['cats'], 'readwrite')
-        trans.oncomplete = e => {
-          resolve()
-        }
-
-        let store = trans.objectStore('cats')
-        store.add(data)
-      })).then(cb).catch(errorCb)
+      this.addDataToDb(data).then(cb).catch(errorCb)
     },
     putData (url, data, cb, errorCb) {
-      axios.put(url, data).then(cb).catch(errorCb)
+      // axios.put(url, data).then(cb).catch(errorCb)
+      this.addDataToDb(data).then(cb).catch(errorCb)
     },
     patchData (url, data, cb, errorCb) {
-      axios.patch(url, data).then(cb).catch(errorCb)
+      // axios.patch(url, data).then(cb).catch(errorCb)
+      this.addDataToDb(data).then(cb).catch(errorCb)
     },
     deleteData (url, cb, errorCb) {
       axios.delete(url).then(cb).catch(errorCb)
     },
 
-    async getCats () {
+    async getDataFromDb () {
       let db = await this.getDb()
 
       return new Promise(resolve => {
         let trans = db.transaction(['cats'], 'readonly')
         trans.oncomplete = () => {
-          resolve(cats)
+          resolve(data)
         }
 
         let store = trans.objectStore('cats')
-        let cats = []
+        let data = []
 
         store.openCursor().onsuccess = e => {
           let cursor = e.target.result
           if (cursor) {
-            cats.push(cursor.value)
+            data.push(cursor.value)
             cursor.continue()
           }
         }
       })
-    }
+    },
+
+    async addDataToDb(data) {
+      let db = await this.getDb()
+
+      return new Promise((resolve, reject) => {
+
+        let trans = db.transaction(['cats'],'readwrite');
+        trans.oncomplete = e => {
+          resolve(data);
+        };
+
+        let store = trans.objectStore('cats');
+        if (data.id.length == 0) {
+          data.id = data.variable
+          store.add(data)
+        } else {
+          store.delete(data.id)
+          data.id = data.variable
+          store.add(data);
+        }
+      });
+    },
   }
 }

@@ -216,12 +216,16 @@ export default {
       vm.loading = true
       let rawData = {}
       function cb (response) {
-        if (typeof (response.data.data) !== 'undefined') {
-          rawData = response.data.data
-        } else if (typeof (response.data) !== 'undefined') {
-          rawData = response.data
-        }
+        // if (typeof (response.data.data) !== 'undefined') {
+        //   rawData = response.data.data
+        // } else if (typeof (response.data) !== 'undefined') {
+        //   rawData = response.data
+        // }
+        rawData = response
+
+        console.log(rawData);
         const l = rawData.length
+
         for (let i = 0; i < l; i += 1) {
           let row = {}
           let cell = {}
@@ -271,7 +275,8 @@ export default {
         vm.savingKey = false
         vm.savingIndex = false
       }
-      function patchCb () {
+      function patchCb (response) {
+        vm.filteredData[rowIndex].id.value = response.id
         vm.savingKey = false
         vm.savingIndex = false
       }
@@ -281,6 +286,9 @@ export default {
       }
       if (errors.length === 0) {
         const postData = {}
+        postData.id = vm.filteredData[rowIndex].id.value
+        postData.variable = vm.filteredData[rowIndex].variable.value
+        postData.value = vm.filteredData[rowIndex].value.value
         postData[key] = value
         const data = postData
         if (vm.filteredData[rowIndex][key].isNew && vm.opt.requests.postUrl) {
