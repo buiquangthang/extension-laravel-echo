@@ -72,6 +72,25 @@ export default {
       })
     },
 
+    async getDataByKey(key) {
+      let db = await this.getDb()
+
+      return new Promise(resolve => {
+        let trans = db.transaction(['cats'], 'readonly')
+        trans.oncomplete = () => {
+          resolve(data)
+        }
+
+        let data;
+
+        let store = db.transaction(['cats'], 'readonly').objectStore('cats')
+
+        store.getKey(key).onsuccess = e => {
+          data = e.target.result.value
+        }
+      })
+    },
+
     async addDataToDb(data) {
       let db = await this.getDb()
 

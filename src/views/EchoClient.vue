@@ -91,11 +91,13 @@ import Echo from 'laravel-echo'
 import VueSimpleSuggest from 'vue-simple-suggest'
 import 'vue-simple-suggest/dist/styles.css'
 import EventBus from '@/shared/event-bus'
+import Requests from '../_mixins/requests'
 
 window.io = require('socket.io-client')
 
 export default {
   name: 'EchoClient',
+  mixins: [Requests],
   components: {
     VueSimpleSuggest
   },
@@ -155,34 +157,44 @@ export default {
     }
   },
   methods: {
-    connectServer () {
-      window.Echo = new Echo({
-        broadcaster: this.$parent.broadcaster,
-        host: this.$parent.domain,
-        reconnection: true,
-        reconnectionAttempts: 3,
-        transports: ['websocket', 'polling']
-      })
+    async connectServer () {
+      let envRegex = /\{{([^{}]*)\}}/g
+      let domainConverted = this.$parent.domain
+      let matches = this.$parent.domain.match(envRegex)
+      for (var i = 0; i < matches.length; i++) {
+        var envStr = matches[i].replace(/{|}/g,'');
+        var value = await this.getDataByKey(envStr);
+        console.log(envStr, value);
+        domainConverted = domainConverted.replace(matches[i], value)
+      }
 
-      window.Echo.connector.socket.on('connect_error', (err) => {
-        if (err) {
-          console.log(err)
-        } else {
-          this.list_messages.unshift({message: 'Error connecting to server'})
-        }
-      })
+      // window.Echo = new Echo({
+      //   broadcaster: this.$parent.broadcaster,
+      //   host: this.$parent.domain,
+      //   reconnection: true,
+      //   reconnectionAttempts: 3,
+      //   transports: ['websocket', 'polling']
+      // })
 
-      window.Echo.connector.socket.on('connect', (err) => {
-        if (err) {
-          console.log(err)
-        } else {
-          this.list_messages.unshift({message: 'Connect success'})
-        }
-      })
+      // window.Echo.connector.socket.on('connect_error', (err) => {
+      //   if (err) {
+      //     console.log(err)
+      //   } else {
+      //     this.list_messages.unshift({message: 'Error connecting to server'})
+      //   }
+      // })
 
-      window.Echo.connector.socket.on('subscription_error', (channel, data) => {
-        this.list_messages.unshift({message: 'Authorization fail!'})
-      })
+      // window.Echo.connector.socket.on('connect', (err) => {
+      //   if (err) {
+      //     console.log(err)
+      //   } else {
+      //     this.list_messages.unshift({message: 'Connect success'})
+      //   }
+      // })
+
+      // window.Echo.connector.socket.on('subscription_error', (channel, data) => {
+      //   this.list_messages.unshift({message: 'Authorization fail!'})
+      // })
     },
 
     connectChannel () {
