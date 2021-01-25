@@ -85,7 +85,7 @@ export default {
 
         let store = db.transaction(['cats'], 'readonly').objectStore('cats')
 
-        store.getKey(key).onsuccess = e => {
+        store.get(key).onsuccess = e => {
           data = e.target.result.value
         }
       })

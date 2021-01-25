@@ -157,59 +157,70 @@ export default {
     }
   },
   methods: {
-    async connectServer () {
+    async handleEnv(str) {
+      let strConverted = str
       let envRegex = /\{{([^{}]*)\}}/g
-      let domainConverted = this.$parent.domain
-      let matches = this.$parent.domain.match(envRegex)
-      for (var i = 0; i < matches.length; i++) {
-        var envStr = matches[i].replace(/{|}/g,'');
-        var value = await this.getDataByKey(envStr);
-        console.log(envStr, value);
-        domainConverted = domainConverted.replace(matches[i], value)
+      let matches = str.match(envRegex)
+      
+      if (matches !== null) {
+        for (var i = 0; i < matches.length; i++) {
+          var envStr = matches[i].replace(/{|}/g,'');
+          var value = await this.getDataByKey(envStr);
+          strConverted = strConverted.replace(matches[i], value)
+        }
       }
 
-      // window.Echo = new Echo({
-      //   broadcaster: this.$parent.broadcaster,
-      //   host: this.$parent.domain,
-      //   reconnection: true,
-      //   reconnectionAttempts: 3,
-      //   transports: ['websocket', 'polling']
-      // })
-
-      // window.Echo.connector.socket.on('connect_error', (err) => {
-      //   if (err) {
-      //     console.log(err)
-      //   } else {
-      //     this.list_messages.unshift({message: 'Error connecting to server'})
-      //   }
-      // })
-
-      // window.Echo.connector.socket.on('connect', (err) => {
-      //   if (err) {
-      //     console.log(err)
-      //   } else {
-      //     this.list_messages.unshift({message: 'Connect success'})
-      //   }
-      // })
-
-      // window.Echo.connector.socket.on('subscription_error', (channel, data) => {
-      //   this.list_messages.unshift({message: 'Authorization fail!'})
-      // })
+      return strConverted
     },
 
-    connectChannel () {
+    async connectServer () {
+      let domain = await this.handleEnv(this.$parent.domain);
+
+      window.Echo = new Echo({
+        broadcaster: this.$parent.broadcaster,
+        host: domain,
+        reconnection: true,
+        reconnectionAttempts: 3,
+        transports: ['websocket']
+      })
+
+      window.Echo.connector.socket.on('connect_error', (err) => {
+        if (err) {
+          console.log(err)
+        } else {
+          this.list_messages.unshift({message: 'Error connecting to server'})
+        }
+      })
+
+      window.Echo.connector.socket.on('connect', (err) => {
+        if (err) {
+          console.log(err)
+        } else {
+          this.list_messages.unshift({message: 'Connect success'})
+        }
+      })
+
+      window.Echo.connector.socket.on('subscription_error', (channel, data) => {
+        this.list_messages.unshift({message: 'Authorization fail!'})
+      })
+    },
+
+    async connectChannel () {
       this.list_messages = []
+      let domain = await this.handleEnv(this.$parent.domain)
+      let channel = await this.handleEnv(this.channel)
+      let event = await this.handleEnv(this.event)
 
       if (typeof window.Echo !== 'undefined') {
-        window.Echo.leave(this.channel)
+        window.Echo.leave(channel)
       }
 
       window.Echo = new Echo({
         broadcaster: this.$parent.broadcaster,
-        host: this.$parent.domain,
+        host: domain,
         reconnection: true,
         reconnectionAttempts: 3,
-        transports: ['websocket', 'polling'],
+        transports: ['websocket'],
         auth:
         {
           headers:
@@ -219,7 +230,7 @@ export default {
         }
       })
 
-      window.Echo.channel(this.channel).listen(this.event, (data) => {
+      window.Echo.channel(channel).listen(event, (data) => {
         this.list_messages.unshift(data)
       })
 
