@@ -96,7 +96,8 @@ export default {
         requests: {
           getUrl: 'https://reqres.in/api/users',
           postUrl: 'https://reqres.in/api/users',
-          patchUrl: 'https://reqres.in/api/users'
+          patchUrl: 'https://reqres.in/api/users',
+          deleteUrl: 'https://reqres.in/api/users'
         }
       }
     }

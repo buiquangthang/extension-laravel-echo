@@ -157,15 +157,15 @@ export default {
     }
   },
   methods: {
-    async handleEnv(str) {
+    async handleEnv (str) {
       let strConverted = str
       let envRegex = /\{{([^{}]*)\}}/g
       let matches = str.match(envRegex)
-      
+
       if (matches !== null) {
         for (var i = 0; i < matches.length; i++) {
-          var envStr = matches[i].replace(/{|}/g,'');
-          var value = await this.getDataByKey(envStr);
+          var envStr = matches[i].replace(/{|}/g, '')
+          var value = await this.getDataByKey(envStr)
           strConverted = strConverted.replace(matches[i], value)
         }
       }
@@ -174,7 +174,7 @@ export default {
     },
 
     async connectServer () {
-      let domain = await this.handleEnv(this.$parent.domain);
+      let domain = await this.handleEnv(this.$parent.domain)
 
       window.Echo = new Echo({
         broadcaster: this.$parent.broadcaster,

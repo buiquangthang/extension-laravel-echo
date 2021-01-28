@@ -223,7 +223,6 @@ export default {
         // }
         rawData = response
 
-        console.log(rawData);
         const l = rawData.length
 
         for (let i = 0; i < l; i += 1) {
@@ -449,9 +448,10 @@ export default {
           str += vm.selectedRowArray[i]
           if (i + 1 < l) str += ','
         }
+
         if (vm.opt.requests.deleteUrl) {
           const url = `${vm.opt.requests.deleteUrl}/${str}`
-          vm.deleteData(url, cb, errorCb)
+          vm.deleteData(url, str, cb, errorCb)
         }
       }
     },

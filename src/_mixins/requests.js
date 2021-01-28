@@ -1,7 +1,4 @@
-import { data } from 'autoprefixer'
-import axios from 'axios'
-
-const DB_NAME = 'catdb'
+const DB_NAME = 'environmentVariable'
 const DB_VERSION = 1
 let DB
 
@@ -15,7 +12,7 @@ export default {
 
         request.onerror = e => {
           console.log('Error opening db', e)
-          reject('Error')
+          reject(Error)
         }
 
         request.onsuccess = e => {
@@ -31,23 +28,19 @@ export default {
       })
     },
     getData (url, cb, errorCb) {
-      // axios.get(url).then(cb).catch(errorCb)
       this.getDataFromDb().then(cb).catch(errorCb)
     },
     postData (url, data, cb, errorCb) {
-      // axios.post(url, data).then(cb).catch(errorCb)
       this.addDataToDb(data).then(cb).catch(errorCb)
     },
     putData (url, data, cb, errorCb) {
-      // axios.put(url, data).then(cb).catch(errorCb)
       this.addDataToDb(data).then(cb).catch(errorCb)
     },
     patchData (url, data, cb, errorCb) {
-      // axios.patch(url, data).then(cb).catch(errorCb)
       this.addDataToDb(data).then(cb).catch(errorCb)
     },
-    deleteData (url, cb, errorCb) {
-      axios.delete(url).then(cb).catch(errorCb)
+    deleteData (url, id, cb, errorCb) {
+      this.deleteDataByKey(id).then(cb).catch(errorCb)
     },
 
     async getDataFromDb () {
@@ -72,7 +65,7 @@ export default {
       })
     },
 
-    async getDataByKey(key) {
+    async getDataByKey (key) {
       let db = await this.getDb()
 
       return new Promise(resolve => {
@@ -81,7 +74,7 @@ export default {
           resolve(data)
         }
 
-        let data;
+        let data
 
         let store = db.transaction(['cats'], 'readonly').objectStore('cats')
 
@@ -91,26 +84,39 @@ export default {
       })
     },
 
-    async addDataToDb(data) {
+    async addDataToDb (data) {
       let db = await this.getDb()
 
       return new Promise((resolve, reject) => {
-
-        let trans = db.transaction(['cats'],'readwrite');
+        let trans = db.transaction(['cats'], 'readwrite')
         trans.oncomplete = e => {
-          resolve(data);
-        };
+          resolve(data)
+        }
 
-        let store = trans.objectStore('cats');
-        if (data.id.length == 0) {
+        let store = trans.objectStore('cats')
+        if (data.id.length === 0) {
           data.id = data.variable
           store.add(data)
         } else {
           store.delete(data.id)
           data.id = data.variable
-          store.add(data);
+          store.add(data)
         }
-      });
+      })
     },
+
+    async deleteDataByKey (key) {
+      let db = await this.getDb()
+
+      return new Promise((resolve, reject) => {
+        let trans = db.transaction(['cats'], 'readwrite')
+        trans.oncomplete = e => {
+          resolve()
+        }
+
+        let store = trans.objectStore('cats')
+        store.delete(key)
+      })
+    }
   }
 }
