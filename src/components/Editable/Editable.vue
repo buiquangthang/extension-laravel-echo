@@ -4,7 +4,7 @@
       <icon name="refresh" spin class="refresh"></icon>
     </div>
 
-    <div id="showColumnsModal" @click.self="setShowColumnsModal()" v-show="showColumnsModal" v-if="customdark">
+    <div id="showColumnsModal" @click.self="setShowColumnsModal()" v-show="showColumnsModal">
       <ul>
         <span @click="setShowColumnsModal()">
           <icon name="times" class="modalTimes"></icon>
@@ -26,6 +26,7 @@
           <icon name="trash" class="trash"></icon>
           Delete
         </a>
+      
         <input
         type="text"
         name="query"
