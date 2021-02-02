@@ -3,7 +3,7 @@
     <h1 class="h3 mb-2 text-gray-800">Setting Environment</h1>
     <button class="btn btn-primary mb-4" @click="showModal">Add new</button>
 
-    <Modal v-show="isModalVisible" @close="closeModal"/>
+    <Modal v-show="isModalVisible" @close="closeModal" v-on:input="handleChange"/>
 
     <div class="row">
       <div class="col-lg-6">
@@ -37,29 +37,27 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Larry</td>
-                  <td>the Bird</td>
-                  <td>@twitter</td>
-                </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="row" v-for="(environment, index) in environments" v-bind:key="index">
+        <div class="col-lg-6">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3" style="display: flex; align-items: center;justify-content: space-between;">
+              <h6 class="m-0 font-weight-bold text-primary">{{ environment }}</h6>
+
+              <button class="btn btn-danger">Delete</button>
+            </div>
+
+            <div class="card-body">
+              <editable :data="{ columns, options }"></editable>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
 </template>
@@ -77,6 +75,7 @@ export default {
   data () {
     return {
       isModalVisible: false,
+      environments: JSON.parse(localStorage.getItem('collection_environment')) || [],
       columns: [
         {
           title: 'Id',
@@ -113,7 +112,10 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
-    }
+    },
+    handleChange(event) {
+      this.environments.push(event)
+     }
   },
 }
 </script>

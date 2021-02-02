@@ -1,10 +1,19 @@
 <script>
   export default {
     name: 'modal',
+    data() {
+      return {
+        value: ''
+      }
+    },
     methods: {
       close() {
-        this.$emit('close');
+        this.$emit('close')
       },
+      updateValue() {
+        this.$emit('input', this.value)
+        this.$emit('close')
+      }
     },
   };
 </script>
@@ -17,21 +26,23 @@
 
           <div class="modal-header">
             <slot name="header">
-              default header
+              New Collection
             </slot>
           </div>
 
           <div class="modal-body">
             <slot name="body">
-              default body
+              <input type="text" v-model="value">
             </slot>
           </div>
 
           <div class="modal-footer">
             <slot name="footer">
-              default footer
               <button class="modal-default-button" @click="$emit('close')">
-                OK
+                Cancel
+              </button>
+              <button class="modal-default-button" @click="updateValue">
+                Create
               </button>
             </slot>
           </div>
