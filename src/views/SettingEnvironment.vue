@@ -107,15 +107,15 @@ export default {
   },
 
   methods: {
-    showModal() {
-      this.isModalVisible = true;
+    showModal () {
+      this.isModalVisible = true
     },
-    closeModal() {
-      this.isModalVisible = false;
+    closeModal () {
+      this.isModalVisible = false
     },
-    handleChange(event) {
+    handleChange (event) {
       this.environments.push(event)
-     }
-  },
+    }
+  }
 }
 </script>

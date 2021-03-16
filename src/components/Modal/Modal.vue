@@ -1,21 +1,21 @@
 <script>
-  export default {
-    name: 'modal',
-    data() {
-      return {
-        value: ''
-      }
+export default {
+  name: 'modal',
+  data () {
+    return {
+      value: ''
+    }
+  },
+  methods: {
+    close () {
+      this.$emit('close')
     },
-    methods: {
-      close() {
-        this.$emit('close')
-      },
-      updateValue() {
-        this.$emit('input', this.value)
-        this.$emit('close')
-      }
-    },
-  };
+    updateValue () {
+      this.$emit('input', this.value)
+      this.$emit('close')
+    }
+  }
+}
 </script>
 
 <template>

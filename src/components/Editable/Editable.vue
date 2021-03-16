@@ -26,7 +26,7 @@
           <icon name="trash" class="trash"></icon>
           Delete
         </a>
-      
+
         <input
         type="text"
         name="query"
