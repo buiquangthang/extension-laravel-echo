@@ -136,295 +136,6 @@ export default {
         vm.deleteRow()
       }
     },
-    getColumnsWidth () {
-      const vm = this
-      vm.columnsWidth = []
-      const l = vm.$refs.inputFields.length
-      let ii = 0
-      for (let i = 0; i < l; i += 1) {
-        vm.$refs.span[i].style.width = null
-        vm.$refs.inputFields[i].style.width = null
-        if (ii < vm.columnsWidth.length - 1) {
-          ii += 1
-        } else {
-          ii = 0
-        }
-      }
-      vm.$nextTick(() => {
-        const ths = this.$refs.tableHead
-        for (let i = 0; i < ths.length; i += 1) {
-          vm.columnsWidth.push(ths[i].offsetWidth)
-        }
-        vm.setColumnsWidth()
-      })
-    },
-    setColumnsWidth () {
-      const vm = this
-      const l = vm.$refs.inputFields.length
-      let ii = 0
-      for (let i = 0; i < l; i += 1) {
-        vm.$refs.span[i].style.width = `${vm.columnsWidth[ii]}px`
-        vm.$refs.inputFields[i].style.width = `${vm.columnsWidth[ii]}px`
-        if (ii < vm.columnsWidth.length - 1) {
-          ii += 1
-        } else {
-          ii = 0
-        }
-      }
-      vm.$nextTick(() => {
-        vm.getTableWidth()
-      })
-    },
-    getTableWidth () {
-      const vm = this
-      const ths = vm.$refs.tableHead
-      let res = 0
-      for (let i = 0; i < ths.length; i += 1) {
-        res += ths[i].offsetWidth
-      }
-      vm.tableWidth = res
-      if (vm.initTableWidth === 0) {
-        vm.initTableWidth = vm.tableWidth
-      }
-      vm.getWrapperWidth()
-      vm.setTableWidth()
-    },
-    getWrapperWidth () {
-      const vm = this
-      vm.wrapperWidth = vm.$el.clientWidth
-    },
-    setTableWidth () {
-      const vm = this
-      const ths = vm.$refs.tableHead
-      if (vm.tableWidth > vm.wrapperWidth) {
-        const l = vm.cols.length
-        for (let i = 0; i < l; i += 1) {
-          if (vm.cols[i].hidden) {
-            vm.$set(vm.cols[i], 'hidden', false)
-            const ll = vm.tableData.length
-            for (let ii = 0; ii < ll; ii += 1) {
-              vm.$set(vm.tableData[ii][vm.cols[i].name], 'isHidden', false)
-            }
-          }
-        }
-        vm.$nextTick(() => {
-          for (let i = 0; i < l; i += 1) {
-            if (!vm.cols[i].show) {
-              vm.tableWidth -= ths[i].offsetWidth
-            }
-          }
-          for (let i = l - 1; i >= 0; i -= 1) {
-            if (vm.tableWidth < vm.wrapperWidth) {
-              break
-            }
-            if (!vm.cols[i].hidden) {
-              vm.tableWidth -= ths[i].offsetWidth
-              vm.$set(vm.cols[i], 'hidden', true)
-              const ll = vm.tableData.length
-              for (let ii = 0; ii < ll; ii += 1) {
-                vm.$set(vm.tableData[ii][vm.cols[i].name], 'isHidden', true)
-              }
-            }
-          }
-          vm.$refs.table.style.width = '100%'
-        })
-      }
-      vm.$nextTick(() => {
-        let sum = 0
-        for (let i = 0; i < ths.length; i += 1) {
-          if (!vm.cols[i].hidden) {
-            sum += ths[i].offsetWidth
-          }
-        }
-        if (sum === vm.initTableWidth) {
-          vm.$refs.wrapper.style.display = 'flex'
-          vm.$refs.wrapper.style.flexFlow = 'column nowrap'
-          vm.$refs.wrapper.style.alignItems = 'center'
-        }
-        vm.$nextTick(() => {
-          for (let i = 0; i < vm.activeCol; i += 1) {
-            if (vm.cols[vm.activeCol].hidden) {
-              vm.swipeRight()
-            }
-          }
-          vm.setSwipable()
-        })
-      })
-    },
-    setTableWidthReverse () {
-      const vm = this
-      if (vm.tableWidth > vm.wrapperWidth) {
-        const l = vm.cols.length
-        for (let i = l - 1; i >= 0; i -= 1) {
-          if (vm.cols[i].hidden) {
-            vm.$set(vm.cols[i], 'hidden', false)
-            const ll = vm.tableData.length
-            for (let ii = 0; ii < ll; ii += 1) {
-              vm.$set(vm.tableData[ii][vm.cols[i].name], 'isHidden', false)
-            }
-          }
-        }
-        vm.$nextTick(() => {
-          for (let i = 0; i < l; i += 1) {
-            if (!vm.cols[i].show) {
-              vm.tableWidth -= vm.columnsWidth[i]
-            }
-          }
-          for (let i = 0; i < l; i += 1) {
-            if (vm.tableWidth < vm.wrapperWidth) {
-              break
-            }
-            if (!vm.cols[i].hidden) {
-              vm.tableWidth -= vm.columnsWidth[i]
-              vm.$set(vm.cols[i], 'hidden', true)
-              const ll = vm.tableData.length
-              for (let ii = 0; ii < ll; ii += 1) {
-                vm.$set(vm.tableData[ii][vm.cols[i].name], 'isHidden', true)
-              }
-            }
-          }
-        })
-      }
-    },
-    resetTableWidths () {
-      const vm = this
-      const ratio = window.devicePixelRatio || 1
-      const w = screen.width * ratio
-      if ((w / ratio) > 713) {
-        const l = vm.cols.length
-        for (let i = 0; i < l; i += 1) {
-          if (vm.cols[i].hidden) {
-            vm.$set(vm.cols[i], 'hidden', false)
-            const ll = vm.tableData.length
-            for (let ii = 0; ii < ll; ii += 1) {
-              vm.$set(vm.tableData[ii][vm.cols[i].name], 'isHidden', false)
-            }
-          }
-        }
-        vm.$nextTick(() => {
-          vm.initTableWidth = 0
-          vm.getColumnsWidth()
-        })
-      }
-    },
-    swipeLeft () {
-      const vm = this
-      const l = vm.cols.length
-      const ll = vm.tableData.length
-      let nextCol = 0
-      let startCol = 0
-      for (let i = l - 1; i >= 0; i -= 1) {
-        if (vm.cols[0].hidden && !vm.cols[i].hidden && vm.cols[i].show) {
-          startCol = i
-          break
-        }
-      }
-      for (let i = 0; i < l; i += 1) {
-        if (vm.cols[0].hidden && vm.cols[i].hidden && vm.cols[i].show) {
-          nextCol = i
-        } else if (vm.cols[l - 1].hidden && !vm.cols[i].hidden && vm.cols[i].show) {
-          break
-        }
-      }
-      function sumCols () {
-        let sum = 0
-        for (let i = 0; i < vm.columnsWidth.length; i += 1) {
-          if (!vm.cols[i].hidden) {
-            sum += vm.columnsWidth[i] + 48
-          }
-        }
-        return sum
-      }
-      if (vm.cols[0].hidden && vm.cols[nextCol].hidden && vm.cols[nextCol].show) {
-        vm.$set(vm.cols[nextCol], 'hidden', false)
-        for (let ii = 0; ii < ll; ii += 1) {
-          vm.$set(vm.tableData[ii][vm.cols[nextCol].name], 'isHidden', false)
-        }
-        nextCol -= 1
-      }
-      for (let i = startCol; i >= 0; i -= 1) {
-        if ((sumCols() + vm.columnsWidth[nextCol] <= vm.wrapperWidth) && vm.cols[0].hidden &&
-          vm.cols[nextCol].hidden && vm.cols[nextCol].show) {
-          vm.$set(vm.cols[nextCol], 'hidden', false)
-          for (let ii = 0; ii < ll; ii += 1) {
-            vm.$set(vm.tableData[ii][vm.cols[nextCol].name], 'isHidden', false)
-          }
-          nextCol -= 1
-        }
-        if (sumCols() >= vm.wrapperWidth && !vm.cols[startCol].hidden && vm.cols[startCol].show) {
-          vm.$set(vm.cols[startCol], 'hidden', true)
-          for (let ii = 0; ii < ll; ii += 1) {
-            vm.$set(vm.tableData[ii][vm.cols[startCol].name], 'isHidden', true)
-          }
-          startCol -= 1
-        }
-      }
-      if (!vm.cols[0].hidden) {
-        vm.leftSwipable = false
-      }
-      if (vm.cols[vm.cols.length - 1].hidden) {
-        vm.rightSwipable = true
-      }
-    },
-    swipeRight () {
-      const vm = this
-      const l = vm.cols.length
-      const ll = vm.tableData.length
-      let nextCol = l - 1
-      let startCol = l - 1
-      for (let i = 0; i < l; i += 1) {
-        if (vm.cols[l - 1].hidden && !vm.cols[i].hidden && vm.cols[i].show) {
-          startCol = i
-          break
-        }
-      }
-      for (let i = l - 1; i >= 0; i -= 1) {
-        if (vm.cols[l - 1].hidden && vm.cols[i].hidden && vm.cols[i].show) {
-          nextCol = i
-        } else if (vm.cols[l - 1].hidden && !vm.cols[i].hidden && vm.cols[i].show) {
-          break
-        }
-      }
-      function sumCols () {
-        let sum = 0
-        for (let i = 0; i < vm.columnsWidth.length; i += 1) {
-          if (!vm.cols[i].hidden) {
-            sum += vm.columnsWidth[i] + 48
-          }
-        }
-        return sum
-      }
-      if (vm.cols[l - 1].hidden && vm.cols[nextCol].hidden && vm.cols[nextCol].show) {
-        vm.$set(vm.cols[nextCol], 'hidden', false)
-        for (let ii = 0; ii < ll; ii += 1) {
-          vm.$set(vm.tableData[ii][vm.cols[nextCol].name], 'isHidden', false)
-        }
-        nextCol += 1
-      }
-      for (let i = startCol; i < l; i += 1) {
-        if ((sumCols() + vm.columnsWidth[nextCol] <= vm.wrapperWidth) && vm.cols[l - 1].hidden &&
-        vm.cols[nextCol].hidden && vm.cols[nextCol].show) {
-          vm.$set(vm.cols[nextCol], 'hidden', false)
-          for (let ii = 0; ii < ll; ii += 1) {
-            vm.$set(vm.tableData[ii][vm.cols[nextCol].name], 'isHidden', false)
-          }
-          nextCol += 1
-        }
-        if (sumCols() >= vm.wrapperWidth && !vm.cols[startCol].hidden && vm.cols[startCol].show) {
-          vm.$set(vm.cols[startCol], 'hidden', true)
-          for (let ii = 0; ii < ll; ii += 1) {
-            vm.$set(vm.tableData[ii][vm.cols[startCol].name], 'isHidden', true)
-          }
-          startCol += 1
-        }
-      }
-      if (vm.cols[0].hidden) {
-        vm.leftSwipable = true
-      }
-      if (!vm.cols[vm.cols.length - 1].hidden) {
-        vm.rightSwipable = false
-      }
-    },
     setStyle () {
       const style = this.data.styling
       switch (style) {
@@ -498,25 +209,22 @@ export default {
         obj = {}
       }
     },
-    setSwipable () {
-      const vm = this
-      const l = vm.cols.length
-      if (vm.cols[l - 1].hidden) {
-        vm.rightSwipable = true
-      }
-    },
+
     // set data Object with all needed and given options
     setData () {
       const vm = this
       vm.loading = true
       let rawData = {}
       function cb (response) {
-        if (typeof (response.data.data) !== 'undefined') {
-          rawData = response.data.data
-        } else if (typeof (response.data) !== 'undefined') {
-          rawData = response.data
-        }
+        // if (typeof (response.data.data) !== 'undefined') {
+        //   rawData = response.data.data
+        // } else if (typeof (response.data) !== 'undefined') {
+        //   rawData = response.data
+        // }
+        rawData = response
+
         const l = rawData.length
+
         for (let i = 0; i < l; i += 1) {
           let row = {}
           let cell = {}
@@ -566,7 +274,8 @@ export default {
         vm.savingKey = false
         vm.savingIndex = false
       }
-      function patchCb () {
+      function patchCb (response) {
+        vm.filteredData[rowIndex].id.value = response.id
         vm.savingKey = false
         vm.savingIndex = false
       }
@@ -576,6 +285,9 @@ export default {
       }
       if (errors.length === 0) {
         const postData = {}
+        postData.id = vm.filteredData[rowIndex].id.value
+        postData.variable = vm.filteredData[rowIndex].variable.value
+        postData.value = vm.filteredData[rowIndex].value.value
         postData[key] = value
         const data = postData
         if (vm.filteredData[rowIndex][key].isNew && vm.opt.requests.postUrl) {
@@ -592,7 +304,6 @@ export default {
             break
           }
         }
-        vm.resetTableWidths()
       } else {
         errorCb()
       }
@@ -737,9 +448,10 @@ export default {
           str += vm.selectedRowArray[i]
           if (i + 1 < l) str += ','
         }
+
         if (vm.opt.requests.deleteUrl) {
           const url = `${vm.opt.requests.deleteUrl}/${str}`
-          vm.deleteData(url, cb, errorCb)
+          vm.deleteData(url, str, cb, errorCb)
         }
       }
     },
@@ -779,7 +491,10 @@ export default {
         vm.activeCell.page = this.currentPage
         vm.$set(vm.filteredData[rowIndex][key], 'isActive', true)
         vm.$nextTick(() => {
-          document.querySelector('input[name=cell].activeCell').focus()
+          const selector = document.querySelector('input[name=cell].activeCell')
+          if (selector) {
+            selector.focus()
+          }
         })
       } else {
         vm.$set(vm.activeCell, 'isActive', false)
@@ -1023,7 +738,7 @@ export default {
         const w = screen.width * ratio
         if ((w / ratio) > 713) {
           if (vm.tableWidth === 0) {
-            vm.getColumnsWidth()
+            // vm.getColumnsWidth()
           }
         }
       })

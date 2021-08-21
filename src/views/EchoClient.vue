@@ -91,11 +91,13 @@ import Echo from 'laravel-echo'
 import VueSimpleSuggest from 'vue-simple-suggest'
 import 'vue-simple-suggest/dist/styles.css'
 import EventBus from '@/shared/event-bus'
+import Requests from '../_mixins/requests'
 
 window.io = require('socket.io-client')
 
 export default {
   name: 'EchoClient',
+  mixins: [Requests],
   components: {
     VueSimpleSuggest
   },
@@ -155,13 +157,31 @@ export default {
     }
   },
   methods: {
-    connectServer () {
+    async handleEnv (str) {
+      let strConverted = str
+      let envRegex = /\{{([^{}]*)\}}/g
+      let matches = str.match(envRegex)
+
+      if (matches !== null) {
+        for (var i = 0; i < matches.length; i++) {
+          var envStr = matches[i].replace(/{|}/g, '')
+          var value = await this.getDataByKey(envStr)
+          strConverted = strConverted.replace(matches[i], value)
+        }
+      }
+
+      return strConverted
+    },
+
+    async connectServer () {
+      let domain = await this.handleEnv(this.$parent.domain)
+
       window.Echo = new Echo({
         broadcaster: this.$parent.broadcaster,
-        host: this.$parent.domain,
+        host: domain,
         reconnection: true,
         reconnectionAttempts: 3,
-        transports: ['websocket', 'polling']
+        transports: ['websocket']
       })
 
       window.Echo.connector.socket.on('connect_error', (err) => {
@@ -185,19 +205,22 @@ export default {
       })
     },
 
-    connectChannel () {
+    async connectChannel () {
       this.list_messages = []
+      let domain = await this.handleEnv(this.$parent.domain)
+      let channel = await this.handleEnv(this.channel)
+      let event = await this.handleEnv(this.event)
 
       if (typeof window.Echo !== 'undefined') {
-        window.Echo.leave(this.channel)
+        window.Echo.leave(channel)
       }
 
       window.Echo = new Echo({
         broadcaster: this.$parent.broadcaster,
-        host: this.$parent.domain,
+        host: domain,
         reconnection: true,
         reconnectionAttempts: 3,
-        transports: ['websocket', 'polling'],
+        transports: ['websocket'],
         auth:
         {
           headers:
@@ -207,7 +230,7 @@ export default {
         }
       })
 
-      window.Echo.channel(this.channel).listen(this.event, (data) => {
+      window.Echo.channel(channel).listen(event, (data) => {
         this.list_messages.unshift(data)
       })
 
